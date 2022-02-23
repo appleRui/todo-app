@@ -8,5 +8,6 @@ ENV HOME=/${WORKDIR} \
   HOST=0.0.0.0
 
 WORKDIR ${HOME}
+RUN yarn global add @vue/cli
 
 EXPOSE 8080

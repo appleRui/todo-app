@@ -1,0 +1,13 @@
+// ****************
+// *** TheLogin ***
+// ****************
+
+.the-login{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .v-sheet.v-card:not(.v-sheet--outlined){
+    box-shadow: none;
+  }
+}
