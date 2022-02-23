@@ -7,7 +7,7 @@
 </style>
 <template>
   <div class="the-home">
-    <v-simple-table v-if="users.length">
+    <v-simple-table>
       <template v-slot:default>
         <thead>
           <tr>
