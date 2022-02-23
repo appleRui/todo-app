@@ -1,9 +1,13 @@
 <style lang="scss" scopped>
-// .the-home{
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
+.the-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  .v-data-table{
+    min-width: 800px;
+  }
+}
 </style>
 <template>
   <div class="the-home">
