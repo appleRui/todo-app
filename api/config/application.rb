@@ -32,6 +32,8 @@ module TodoApp
     config.i18n.default_locale = :ja
     # autolocas path config
     config.add_autoload_paths_to_load_path = false
+
+    config.autoload_paths += %W(#{config.root}/lib/validator)
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

@@ -1,0 +1,21 @@
+record
+attribute
+value
+exit
+attribute
+record.errors.add(attribute, :too_long, count: max) if value.length > max
+record.errors.add(attribute,count: max) if value.length > max
+record
+record.errors.add(attribute, :too_long, count: max) if value.length > max
+:too_long
+record.errors.add(attribute, :too_long, count: max) if value.length > max
+exit
+record.errors.add(attribute, :too_long, count: max) if value.length > max
+email = "test@example@com"
+user.email = email
+user
+email = "TEST@test.COM"
+user = User.new(name: "test", email: email, password: "password")
+user.save
+exit
+exit!
