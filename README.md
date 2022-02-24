@@ -21,3 +21,8 @@ dc build
 ```sh
 dc run api rails db:create
 ```
+
+### vue
+```sh
+dc run front create [app-name]
+```

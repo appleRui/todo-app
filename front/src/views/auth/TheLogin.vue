@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
     name: "TheLogin",
@@ -53,7 +54,14 @@ export default {
     },
     methods: {
       login(){
-        console.log(this.user)
+        axios.post('http://localhost:3000/api/v1/user_token', this.user, { withCredentials: true })
+        .then((res) => {
+          console.log(res.data)
+        })
+        .catch((e) => {
+          console.log(e)
+          alert('ログインに失敗しました')
+        })
       }
     },
     computed: {

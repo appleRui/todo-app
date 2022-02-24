@@ -34,6 +34,9 @@ module TodoApp
     config.add_autoload_paths_to_load_path = false
 
     config.autoload_paths += %W(#{config.root}/lib/validator)
+
+    # Cookieを処理するmeddlewareを追加(APIモードにはデフォルトで入っていない)
+    config.middleware.use ActionDispatch::Cookies
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

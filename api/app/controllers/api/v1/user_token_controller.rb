@@ -25,7 +25,7 @@ class Api::V1::UserTokenController < ApplicationController
     end
 
     def auth_params
-      params.require(:auth).permit(:email, :password)
+      params.require(:user_token).permit(:email, :password)
     end
 
     # トークンを発行する
