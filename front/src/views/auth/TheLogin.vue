@@ -41,6 +41,7 @@
 
 <script>
 import axios from 'axios';
+import auth from '@/services/auth';
 
 export default {
     name: "TheLogin",
@@ -56,7 +57,8 @@ export default {
       login(){
         axios.post('http://localhost:3000/api/v1/user_token', this.user, { withCredentials: true })
         .then((res) => {
-          console.log(res.data)
+          auth.login(res.data)
+          console.log('Success Login')
         })
         .catch((e) => {
           console.log(e)

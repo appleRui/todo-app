@@ -19,7 +19,7 @@ module UserAuth
   self.token_public_key = nil
 
   mattr_accessor :token_access_key
-  self.token_access_key = :access_token
+  self.token_access_key = :todo_app
 
   mattr_accessor :not_found_exception_class
   self.not_found_exception_class = ActiveRecord::RecordNotFound

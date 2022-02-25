@@ -19,7 +19,6 @@ class Api::V1::UserTokenController < ApplicationController
 
   private
 
-    # メールアドレスからアクティブなユーザーを返す
     def entity
       @_entity ||= User.find_activated(auth_params[:email])
     end
