@@ -42,6 +42,7 @@
 <script>
 import axios from 'axios';
 import auth from '@/services/auth';
+import store from '@/store/index';
 
 export default {
     name: "TheLogin",
@@ -58,7 +59,7 @@ export default {
         axios.post('http://localhost:3000/api/v1/user_token', this.user, { withCredentials: true })
         .then((res) => {
           auth.login(res.data)
-          this.$router.push('/')
+          this.$router.push(store.state.remenberRoute.path)
         })
         .catch((e) => {
           console.error(e)

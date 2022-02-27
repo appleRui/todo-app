@@ -4,6 +4,7 @@
 import auth from '@/services/auth'
 import axios from 'axios'
 import store from '@/store/index'
+import route from '@/router/index'
 
 const authGuard = async (to, from, next) => {
 
@@ -21,8 +22,10 @@ const authGuard = async (to, from, next) => {
   }
 
   if (!auth.isUserPresent()) {
+    store.dispatch('setRemenberRoute', to)
     alert('ログインしていません')
-    location.href = '/login'
+    route.push('/login')
+    // location.href = '/login'
     next(false)
     return
   }
