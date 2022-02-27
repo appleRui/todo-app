@@ -1,17 +1,16 @@
 import store from '@/store/index'
+import axios from 'axios'
 const storage = window.localStorage
 
-class Auth{
+class Auth {
 
   setStorage(exp) {
     storage.setItem('exp', exp * 1000)
   }
 
-  // removeStorage() {
-  //   for (const key of Object.values(keys)) {
-  //     storage.removeItem(key)
-  //   }
-  // }
+  removeStorage() {
+    storage.removeItem('exp')
+  }
 
   getExpire() {
     return storage.getItem('exp')
@@ -21,16 +20,32 @@ class Auth{
     return new Date().getTime() < this.getExpire()
   }
 
-  login({ exp, user }) {
+  get user() {
+    return store.state.user || {}
+  }
+
+  isUserPresent() {
+    return ('id' in this.user)
+  }
+
+  get loggedIn() {
+    return this.isAuthenticated() && this.isUserPresent()
+  }
+
+
+  login({
+    exp,
+    user
+  }) {
     this.setStorage(exp, user)
     store.dispatch('setCurrentUser', user)
   }
 
-  // logout() {
-  //   this.$axios.$delete('/api/v1/user_token')
-  //   this.removeStorage()
-  //   this.store.dispatch('setCurrentUser', null)
-  // }
+  logout() {
+    axios.delete('http://localhost:3000/api/v1/user_token')
+    this.removeStorage()
+    store.dispatch('setCurrentUser', null)
+  }
 }
 
 export default new Auth

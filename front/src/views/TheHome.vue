@@ -4,38 +4,31 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  .v-data-table{
+  .v-data-table {
     min-width: 800px;
   }
 }
 </style>
+
 <template>
   <div class="the-home">
-    <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">ID</th>
-            <th class="text-left">名前</th>
-            <th class="text-left">メールアドレス</th>
-            <th class="text-left">登録日</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in users" :key="user.id">
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ dateFormat(user.created_at) }}</td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
+    <v-card class="mx-auto" max-width="344" outlined>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <v-list-item-title class="text-h5 mb-1">
+            {{ user.name }}
+          </v-list-item-title>
+          <v-list-item-subtitle
+            >{{ user.email }}</v-list-item-subtitle
+          >
+        </v-list-item-content>
+      </v-list-item>
+    </v-card>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import store from '@/store/index';
 
 export default {
   name: "TheHome",
@@ -45,9 +38,7 @@ export default {
     }
   },
   created() {
-    axios.get('http://localhost:3000/api/v1/users').then((res)=>{
-      this.users = res.data
-    })
+    this.user = store.state.user
   },
   computed: {
     dateFormat () {

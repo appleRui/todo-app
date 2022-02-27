@@ -58,10 +58,10 @@ export default {
         axios.post('http://localhost:3000/api/v1/user_token', this.user, { withCredentials: true })
         .then((res) => {
           auth.login(res.data)
-          console.log('Success Login')
+          this.$router.push('/')
         })
         .catch((e) => {
-          console.log(e)
+          console.error(e)
           alert('ログインに失敗しました')
         })
       }
