@@ -33,10 +33,7 @@ class Auth {
   }
 
 
-  login({
-    exp,
-    user
-  }) {
+  login({exp, user}) {
     this.setStorage(exp, user)
     store.dispatch('setCurrentUser', user)
   }

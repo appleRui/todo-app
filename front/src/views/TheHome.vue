@@ -18,17 +18,19 @@
           <v-list-item-title class="text-h5 mb-1">
             {{ user.name }}
           </v-list-item-title>
-          <v-list-item-subtitle
-            >{{ user.email }}</v-list-item-subtitle
-          >
+          <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
+      <v-card-actions>
+        <v-btn outlined text @click.prevent="logout"> ログアウト </v-btn>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script>
 import store from '@/store/index';
+import auth from '@/services/auth';
 
 export default {
   name: "TheHome",
@@ -49,7 +51,15 @@ export default {
         return dateTimeFormat.format(new Date(date))
       }
     }
-  }
-
+  },
+  methods: {
+    logout(){
+      const result = confirm('ログアウトしますか？')
+      if(result){
+        auth.logout()
+        this.$router.push('/login')
+      }
+    }
+  },
 }
 </script>
