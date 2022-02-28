@@ -6,7 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 table_names = %w(
-  users
+  users,
+  todos
 )
 
 table_names.each do |table_name|
