@@ -1,6 +1,11 @@
 module UserAuth
   module Authenticator
 
+    def isAuthenticate
+      user = fetch_entity_from_token
+      @isAuthenticate = user.refresh_token == params[:refresh_token]
+    end
+
     def authenticate_user
       current_user.presence || unauthorized_user
     end
@@ -24,7 +29,7 @@ module UserAuth
 
       # トークンの取得(リクエストヘッダー優先)
       def token
-        token_from_request_headers || cookies[token_access_key]
+        token_from_request_headers# || cookies[token_access_key]
       end
 
       # トークンからユーザーを取得する

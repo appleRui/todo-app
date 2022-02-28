@@ -23,6 +23,7 @@
 
 <script>
 import axios from 'axios'
+import auth from '@/services/auth'
 
 export default {
   data() {
@@ -31,9 +32,13 @@ export default {
     }
   },
   async created() {
-    const res = await axios.get('http://localhost:3000/api/v1/todos/index')
+    const res = await axios.get(`http://localhost:3000/api/v1/todos/index?refresh_token=${auth.getRefreshToken()}`,{
+      headers: {
+          'Authorization': auth.getToken()
+        },
+    })
     if(res.data){
-      this.items = res.data
+      this.items = res.data.todos
     }
   },
 }
