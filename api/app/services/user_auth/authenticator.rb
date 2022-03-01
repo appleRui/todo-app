@@ -2,8 +2,16 @@ module UserAuth
   module Authenticator
 
     def isAuthenticate
-      user = fetch_entity_from_token
-      @isAuthenticate = user.refresh_token == params[:refresh_token]
+      @result = false
+      @logout = false
+      return if current_user.nil?
+      if params[:refresh_token].present? && current_user.refresh_token == params[:refresh_token]
+        @result = true
+      else
+        @logout = true
+      end
+      # return @logout = true if params[:refresh_token].nil? || 
+      # return @result = true if current_user.refresh_token == params[:refresh_token]
     end
 
     def authenticate_user

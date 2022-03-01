@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import axios from 'axios'
-import auth from '@/services/auth'
+import axios from '@/services/http'
+// import auth from '@/services/auth'
 
 export default {
   data() {
@@ -32,11 +32,7 @@ export default {
     }
   },
   async created() {
-    const res = await axios.get(`http://localhost:3000/api/v1/todos/index?refresh_token=${auth.getRefreshToken()}`,{
-      headers: {
-          'Authorization': auth.getToken()
-        },
-    })
+    const res = await axios.get(`/api/v1/todos/index`)
     if(res.data){
       this.items = res.data.todos
     }
