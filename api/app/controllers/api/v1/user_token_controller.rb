@@ -5,8 +5,10 @@ class Api::V1::UserTokenController < ApplicationController
 
   # login
   def create
-    cookies[token_access_key] = cookie_token
+    # cookies[token_access_key] = cookie_token
     render json: {
+      token: auth.token,
+      refresh_token: refresh_token,
       exp: auth.payload[:exp],
       user: entity.my_json
     }
@@ -20,7 +22,7 @@ class Api::V1::UserTokenController < ApplicationController
   private
 
     def entity
-      @_entity ||= User.find_activated(auth_params[:email])
+      @entity ||= User.find_activated(auth_params[:email])
     end
 
     def auth_params
@@ -30,6 +32,13 @@ class Api::V1::UserTokenController < ApplicationController
     # トークンを発行する
     def auth
       @_auth ||= UserAuth::AuthToken.new(payload: { sub: entity.id })
+    end
+
+    # リフレッシュトークンの作成（ログイン時に書き換える）
+    def refresh_token
+      @_refresh_token ||= SecureRandom.urlsafe_base64
+      entity.update(refresh_token: @_refresh_token)
+      @_refresh_token
     end
 
     # クッキーに保存するトークン
@@ -42,6 +51,7 @@ class Api::V1::UserTokenController < ApplicationController
       }
     end
 
+    # ユーザーが存在するか認証を行う
     def authenticate
       unless entity.present? && entity.authenticate(auth_params[:password])
         raise UserAuth.not_found_exception_class

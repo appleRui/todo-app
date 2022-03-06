@@ -1,7 +1,15 @@
+<style lang="scss" scoped>
+.container{
+  height: 100vh;
+}
+</style>
+
 <template>
   <v-app>
     <v-main>
-      <router-view/>
+      <v-container>
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>

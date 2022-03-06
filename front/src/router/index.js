@@ -1,19 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { authGuard } from './authGuard'
+import {
+  authGuard
+} from './authGuard'
+import TodoList from '@/views/todo/TodoList'
+import Home from '@/views/TheHome'
+import Login from '@/views/auth/TheLogin'
 
 Vue.use(VueRouter)
 
 const routes = [{
     path: '/login',
-    name: 'TheLogin',
-    component: () => import('@/views/auth/TheLogin')
+    name: 'Login',
+    component: Login
   },
   {
     path: '/',
     beforeEnter: authGuard,
-    name: 'TheHome',
-    component: () => import('@/views/TheHome')
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/todos',
+    beforeEnter: authGuard,
+    name: 'TodoList',
+    component: TodoList
   },
 ]
 

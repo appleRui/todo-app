@@ -4,16 +4,27 @@ const storage = window.localStorage
 
 class Auth {
 
-  setStorage(exp) {
-    storage.setItem('exp', exp * 1000)
-  }
+  setStorage(authData) {
+    storage.setItem('exp', authData.exp * 1000)
+    storage.setItem('token', authData.token)
+    storage.setItem('refresh_token', authData.refresh_token)
+  }x
 
   removeStorage() {
     storage.removeItem('exp')
+    storage.removeItem('token')
+    storage.removeItem('refresh_token')
   }
 
   getExpire() {
     return storage.getItem('exp')
+  }
+  getRefreshToken() {
+    return storage.getItem('refresh_token')
+  }
+
+  getToken() {
+    return storage.getItem('token')
   }
 
   isAuthenticated() {
@@ -33,9 +44,9 @@ class Auth {
   }
 
 
-  login({exp, user}) {
-    this.setStorage(exp, user)
-    store.dispatch('setCurrentUser', user)
+  login(authData) {
+    this.setStorage(authData)
+    store.dispatch('setCurrentUser', authData.user)
   }
 
   logout() {

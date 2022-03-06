@@ -5,11 +5,15 @@ import auth from '@/services/auth'
 import axios from 'axios'
 import store from '@/store/index'
 import route from '@/router/index'
+const storage = window.localStorage
 
 const authGuard = async (to, from, next) => {
 
   if (auth.isAuthenticated()) {
     await axios.get('http://localhost:3000/api/v1/users/current_user', {
+      headers: {
+          'Authorization': storage.getItem('token')
+        },
         withCredentials: true
       })
       .then((tokenUser) => {
