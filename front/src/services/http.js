@@ -30,6 +30,10 @@ class Http {
           config.data['refresh_token'] = refresh_token
         }
 
+        if (config.method === "patch") {
+          config.data['refresh_token'] = refresh_token
+        }
+
         config.headers['Authorization'] = authorization
 
         return config;
@@ -50,7 +54,7 @@ class Http {
         return res;
       },
       (error) => {
-        console.error(error.response)
+        console.error(error)
       }
     )
   }
@@ -63,6 +67,12 @@ class Http {
 
   async post(uri, params) {
     return await this.http.post(uri, {
+      params: params
+    })
+  }
+
+  async patch(uri, params) {
+    return await this.http.patch(uri, {
       params: params
     })
   }

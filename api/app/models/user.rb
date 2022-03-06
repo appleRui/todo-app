@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include UserAuth::Tokenizable
   before_validation :downcase_email
   has_secure_password
+  has_many :todos, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 30, allow_blank: true }
   VALID_PASSWORD_REGEX = /\A[\w\-]+\z/

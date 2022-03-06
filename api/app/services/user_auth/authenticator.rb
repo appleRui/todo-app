@@ -50,7 +50,7 @@ module UserAuth
       # トークンのユーザーを返す
       def current_user
         return if token.blank?
-        @_current_user ||= fetch_entity_from_token
+        @current_user ||= fetch_entity_from_token
       end
 
       # 401エラーかつ、クッキーを削除する

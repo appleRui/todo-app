@@ -22,7 +22,7 @@ class Api::V1::UserTokenController < ApplicationController
   private
 
     def entity
-      @_entity ||= User.find_activated(auth_params[:email])
+      @entity ||= User.find_activated(auth_params[:email])
     end
 
     def auth_params
@@ -51,6 +51,7 @@ class Api::V1::UserTokenController < ApplicationController
       }
     end
 
+    # ユーザーが存在するか認証を行う
     def authenticate
       unless entity.present? && entity.authenticate(auth_params[:password])
         raise UserAuth.not_found_exception_class
