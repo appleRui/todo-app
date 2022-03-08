@@ -54,7 +54,7 @@ class Http {
         return res;
       },
       (error) => {
-        console.error(error)
+        console.error(error.resuponse)
       }
     )
   }
