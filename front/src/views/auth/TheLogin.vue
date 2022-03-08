@@ -34,6 +34,7 @@
             </v-card-actions>
           </v-form>
         </v-card-text>
+      <theToaster />
       </v-card>
     </div>
   </div>
@@ -43,9 +44,14 @@
 import axios from 'axios';
 import auth from '@/services/auth';
 import store from '@/store/index';
+import toasterStore from '@/store/modules/toaster';
+import theToaster from '@/components/ui/TheToaster.vue';
 
 export default {
     name: "TheLogin",
+    components: {
+      theToaster
+    },
     data() {
       return {
         user: {
@@ -62,8 +68,9 @@ export default {
           this.$router.push(store.state.remenberRoute.path)
         })
         .catch((e) => {
-          console.error(e)
-          alert('ログインに失敗しました')
+          // console.error(e.response)
+          // alert('ログインに失敗しました')
+          toasterStore.dispatch('getToast', {msg: e.response.data.message})
         })
       }
     },

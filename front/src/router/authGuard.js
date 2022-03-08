@@ -5,13 +5,14 @@ import auth from '@/services/auth'
 import axios from 'axios'
 import store from '@/store/index'
 import route from '@/router/index'
+import toasterStore from '@/store/modules/toaster';
 const storage = window.localStorage
 
 const authGuard = async (to, from, next) => {
 
   if (auth.isAuthenticated()) {
     await axios.get('http://localhost:3000/api/v1/users/current_user', {
-      headers: {
+        headers: {
           'Authorization': storage.getItem('token')
         },
         withCredentials: true
@@ -27,7 +28,9 @@ const authGuard = async (to, from, next) => {
 
   if (!auth.isUserPresent()) {
     store.dispatch('setRemenberRoute', to)
-    alert('ログインしていません')
+    toasterStore.dispatch('getToast', {
+      msg: "ログインが必要です"
+    })
     route.push('/login')
     // location.href = '/login'
     next(false)

@@ -61,6 +61,6 @@ class Api::V1::UserTokenController < ApplicationController
     # NotFoundエラー発生時にヘッダーレスポンスのみを返す
     # status => Rack::Utils::SYMBOL_TO_STATUS_CODE
     def not_found
-      head(:not_found)
+      render status: 404, json: {status: 404, message: 'メールアドレス、パスワードのいずれかのログイン情報に誤りがあります'}
     end
 end

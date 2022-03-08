@@ -189,7 +189,7 @@ export default {
       return store.state.todos.filter((item) => item.check === false)
     },
     disabled() {
-        return !this.newTodo.name || !this.newTodo.content
+        return !this.newTodo.name
       }
   }
 }
