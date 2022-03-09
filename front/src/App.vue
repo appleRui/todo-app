@@ -1,16 +1,12 @@
 <style lang="scss" scoped>
-.container{
-  height: 100vh;
+.v-navigation-drawer__content {
+  background-color: #fafafa;
 }
 </style>
 
 <template>
   <v-app>
-    <v-main>
-      <v-container>
-        <router-view />
-      </v-container>
-    </v-main>
+      <router-view />
   </v-app>
 </template>
 
@@ -18,8 +14,8 @@
 
 export default {
   name: 'App',
-  data: () => ({
-    //
-  }),
+  data(){
+    return {}
+  },
 };
 </script>

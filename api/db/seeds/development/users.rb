@@ -10,4 +10,7 @@
   end
 end
 
+user = User.new(name: 'テストユーザー', email: 'test@example.com', password: 'password', activated: true)
+user.save!
+
 puts "users = #{User.count}"
