@@ -4,7 +4,7 @@ import {
   authGuard
 } from './authGuard'
 import TodoList from '@/views/todo/TodoList'
-import Home from '@/views/TheHome'
+import Root from '@/views/TheRoot.vue'
 import Login from '@/views/auth/TheLogin'
 
 Vue.use(VueRouter)
@@ -17,8 +17,8 @@ const routes = [{
   {
     path: '/',
     beforeEnter: authGuard,
-    name: 'Home',
-    component: Home
+    name: 'TheRoot',
+    component: Root
   },
   {
     path: '/todos',
