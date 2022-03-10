@@ -1,4 +1,7 @@
 <style lang="scss" scoped>
+.v-list--nav{
+  padding-left: 48px;
+}
 </style>
 
 <template>
