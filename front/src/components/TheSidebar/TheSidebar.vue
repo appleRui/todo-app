@@ -43,7 +43,7 @@ export default({
     return {
       items: [
           { title: 'TODOリスト', icon: 'mdi-format-list-checks', route: 'todos' },
-          // { title: 'ノート', icon: 'mdi-notebook' },
+          { title: 'ノート', icon: 'mdi-notebook', route: 'notes' },
           // { title: 'カレンダー', icon: 'mdi-calendar' },
         ],
     }
