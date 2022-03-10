@@ -18,7 +18,17 @@ const routes = [{
     path: '/',
     beforeEnter: authGuard,
     name: 'TheRoot',
-    component: Root
+    component: Root,
+    children: [
+      {
+        path: '/',
+        redirect: 'todos'
+      },
+      {
+        path: 'todos',
+        component: () => import('@/views/todo/TodoList.vue')
+      },
+    ]
   },
   {
     path: '/todos',

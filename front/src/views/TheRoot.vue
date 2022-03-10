@@ -20,12 +20,22 @@
 <script>
 import TheHeader from '@/components/TheHeader/TheHeader.vue'
 import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
+import axios from '@/services/http'
+import store from '@/store/todo'
 
 export default ({
   name: 'TheRoot',
   components: {
     TheHeader,
     TheSidebar
+  },
+  async created() {
+    try{
+      const res = await axios.get(`/api/v1/todos`)
+      store.commit('setTodos', res.data.todos)
+    }catch(e){
+      console.error(e)
+    }
   },
   data(){
     return {

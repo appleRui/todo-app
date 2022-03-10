@@ -1,4 +1,7 @@
 <style lang="scss" scoped>
+.todos{
+  margin-top: 2rem;
+}
 .todo-inner__checkbox {
   width: 5%;
 }
@@ -6,6 +9,7 @@
 
 <template>
   <div class="todos">
+    <h1>インボックス</h1>
     <!-- simple-table -->
     <v-simple-table>
       <template v-slot:default>
@@ -140,14 +144,6 @@ export default {
       timeout: 3000,
       dialog: false,
       formCalendar: false
-    }
-  },
-  async created() {
-    try{
-      const res = await axios.get(`/api/v1/todos`)
-      store.commit('setTodos', res.data.todos)
-    }catch(e){
-      console.error(e)
     }
   },
   methods: {
