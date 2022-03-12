@@ -14,6 +14,11 @@ const routes = [{
     component: Login
   },
   {
+    path: '/draft',
+    beforeEnter: authGuard,
+    component: () => import('@/views/note/TheDraft.vue')
+  },
+  {
     path: '/',
     beforeEnter: authGuard,
     name: 'TheRoot',
@@ -29,9 +34,13 @@ const routes = [{
       {
         path: 'notes',
         component: () => import('@/views/note/NoteList.vue')
-      }
+      },
+      {
+        path: 'draft',
+        component: () => import('@/views/note/TheDraft.vue')
+      },
     ]
-  }
+  },
 ]
 
 const router = new VueRouter({

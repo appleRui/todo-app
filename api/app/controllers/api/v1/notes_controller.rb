@@ -8,8 +8,24 @@ class Api::V1::NotesController < ApplicationController
   end
 
   def create
+    note = Note.new(note_params)
+    note.user_id = current_user.id
+    p note
+    p note.new_record?
+    if note.new_record?
+      note.save!
+    else
+      note.update!
+    end
   end
 
   def show
+  end
+
+  private 
+
+  def note_params
+    p params
+    params.require(:params).permit(:title, :content)
   end
 end

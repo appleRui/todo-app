@@ -43,9 +43,10 @@
       </template>
     </v-simple-table>
 
-    <a class="add-note-btn" href="#"
-      ><v-icon color="white">mdi-notebook-plus</v-icon></a
-    >
+    <router-link to="/draft" class="add-note-btn">
+      <v-icon color="white">mdi-notebook-plus</v-icon>
+    </router-link>
+
   </div>
 </template>
 
@@ -56,6 +57,7 @@ import dayjs from 'dayjs'
 export default({
   data() {
     return {
+      
     }
   },
   computed:{
