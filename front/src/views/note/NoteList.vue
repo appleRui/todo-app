@@ -30,6 +30,7 @@
           <tr>
             <th class="text-left">タイトル</th>
             <th class="text-left">作成日</th>
+            <th class="text-left">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -38,6 +39,11 @@
               <a class="text-black note-link" href="#">{{ note.title }}</a>
             </td>
             <td>{{ dateFormat(note.created_at) }}</td>
+            <td>
+              <button @click="noteDestroy(note.id)">
+                <v-icon>mdi-delete</v-icon>
+              </button>
+            </td>
           </tr>
         </tbody>
       </template>
@@ -46,23 +52,35 @@
     <router-link to="/draft" class="add-note-btn">
       <v-icon color="white">mdi-notebook-plus</v-icon>
     </router-link>
-
   </div>
 </template>
 
 <script>
-import store from '@/store/note'
+import axios from '@/services/http'
+import storeToast from '@/store/modules/toaster'
 import dayjs from 'dayjs'
 
 export default({
   data() {
-    return {
-      
+    return {}
+  },
+  methods: {
+    async noteDestroy(noteId){
+      try{
+        const res = confirm('本当に削除しますか？')
+        if(res){
+          await axios.delete(`/api/v1/notes/${noteId}`)
+          this.$store.dispatch('note/removeNote', noteId)
+          storeToast.dispatch('getToast', {msg: '削除しました', color: 'success', timeout: 4000})
+        }
+      }catch(error){
+        console.error(error)
+      }
     }
   },
   computed:{
     notes() {
-      return store.state.notes
+      return this.$store.getters['note/notes']
     },
     dateFormat(){
       return function(date){

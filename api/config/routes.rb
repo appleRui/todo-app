@@ -9,7 +9,7 @@ Rails.application.routes.draw do
         get :current_user, action: :show, on: :collection
       end
       resources :todos, only: [:index, :create, :update]
-      resources :notes, only: [:index, :create]
+      resources :notes, only: [:index, :create, :destroy]
       
       # login, logout
       resources :user_token, only: [:create] do

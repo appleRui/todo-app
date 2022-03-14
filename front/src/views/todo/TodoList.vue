@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in todos" :key="item.key">
+          <tr v-for="item in todos" :key="item.id">
             <td class="todo-inner__checkbox">
               <v-simple-checkbox
                 v-model="item.check"
