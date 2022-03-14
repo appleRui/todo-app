@@ -10,7 +10,7 @@ $list-padding: 8px;
     clipped-left
     elevation="1"
     color="primary"
-    style="padding-left: 42px; padding-right: 42px"
+    class="px-10"
   >
     <v-app-bar-nav-icon
       @click="setDrawer = !setDrawer"

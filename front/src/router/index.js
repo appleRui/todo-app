@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import {
   authGuard
 } from './authGuard'
-import TodoList from '@/views/todo/TodoList'
 import Root from '@/views/TheRoot.vue'
 import Login from '@/views/auth/TheLogin'
 
@@ -15,12 +14,16 @@ const routes = [{
     component: Login
   },
   {
+    path: '/draft',
+    beforeEnter: authGuard,
+    component: () => import('@/views/note/TheDraft.vue')
+  },
+  {
     path: '/',
     beforeEnter: authGuard,
     name: 'TheRoot',
     component: Root,
-    children: [
-      {
+    children: [{
         path: '/',
         redirect: 'todos'
       },
@@ -28,13 +31,15 @@ const routes = [{
         path: 'todos',
         component: () => import('@/views/todo/TodoList.vue')
       },
+      {
+        path: 'notes',
+        component: () => import('@/views/note/NoteList.vue')
+      },
+      {
+        path: 'draft',
+        component: () => import('@/views/note/TheDraft.vue')
+      },
     ]
-  },
-  {
-    path: '/todos',
-    beforeEnter: authGuard,
-    name: 'TodoList',
-    component: TodoList
   },
 ]
 

@@ -4,9 +4,12 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import Ripple from 'vuetify/lib/directives/ripple'
-
+import mavonEditor from 'mavon-editor'
 
 Vue.config.productionTip = false
+
+// mavonEditer
+Vue.use(mavonEditor)
 
 new Vue({
   router,

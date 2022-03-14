@@ -12,6 +12,7 @@
     <v-main>
       <v-container>
         <router-view />
+        <the-toaster />
       </v-container>
     </v-main>
   </div>
@@ -20,19 +21,23 @@
 <script>
 import TheHeader from '@/components/TheHeader/TheHeader.vue'
 import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
+import TheToaster from '@/components/ui/TheToaster.vue'
 import axios from '@/services/http'
-import store from '@/store/todo'
+import Todotore from '@/store/todo'
 
 export default ({
   name: 'TheRoot',
   components: {
     TheHeader,
-    TheSidebar
+    TheSidebar,
+    TheToaster
   },
   async created() {
     try{
-      const res = await axios.get(`/api/v1/todos`)
-      store.commit('setTodos', res.data.todos)
+      const todos = await axios.get(`/api/v1/todos`)
+      Todotore.commit('setTodos', todos.data.todos)
+      const notes = await axios.get(`/api/v1/notes`)
+      this.$store.dispatch('note/setNotes', notes.data.notes)
     }catch(e){
       console.error(e)
     }

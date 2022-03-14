@@ -34,8 +34,12 @@ class Http {
           config.data['refresh_token'] = refresh_token
         }
 
-        config.headers['Authorization'] = authorization
+        if (config.method === "delete") {
+          if (!config.params) config.params = {}
+          config.params['refresh_token'] = refresh_token
+        }
 
+        config.headers['Authorization'] = authorization
         return config;
       }
     )
@@ -54,11 +58,12 @@ class Http {
         return res;
       },
       (error) => {
-        console.error(error.resuponse)
+        console.error(error)
       }
     )
   }
 
+  // Request methods
   async get(uri, params) {
     return await this.http.get(uri, {
       params: params
@@ -73,6 +78,12 @@ class Http {
 
   async patch(uri, params) {
     return await this.http.patch(uri, {
+      params: params
+    })
+  }
+
+  async delete(uri, params) {
+    return await this.http.delete(uri, {
       params: params
     })
   }
