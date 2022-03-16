@@ -73,8 +73,8 @@ export default({
   },
   methods: {
     async onClickDialog(noteId){
-      const noteData = await axios.get(`/api/v1/notes/${noteId}`)
-      this.$store.dispatch('note/setOpenNote', noteData.data.note)
+      const res = await axios.get(`/api/v1/notes/${noteId}`)
+      this.$store.dispatch('note/setOpenNote', res.data.note)
       dialogStore.commit('open', 'TheNote')
     },
     async noteDestroy(noteId){
