@@ -62,7 +62,7 @@
 <script>
 import TheHeader from '@/components/TheHeader/TheHeader.vue'
 import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
-import TheToaster from '@/components/ui/TheToaster.vue';
+import TheToaster from '@/components/Modules/TheToaster.vue';
 import axios from '@/services/http'
 import store from '@/store/modules/toaster'
 import 'mavon-editor/dist/css/index.css'
@@ -73,7 +73,7 @@ export default({
       drawer: false,
       note: {
         title: '',
-        content: ''
+        content: '# テスト'
       },
       toolbars: {
         bold: true,
