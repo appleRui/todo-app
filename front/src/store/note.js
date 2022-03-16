@@ -2,12 +2,16 @@
 
 const state = {
   notes: [],
-  remenberNote: {}
+  remenberNote: {},
+  openNote: {}
 }
 
 const getters = {
   notes(state) {
     return state.notes;
+  },
+  note(state) {
+    return state.openNote;
   }
 };
 
@@ -22,6 +26,12 @@ const mutations = {
     state.notes.forEach((note, i) => {
       if (note.id === id) state.notes.splice(i, 1)
     });
+  },
+  setOpenNote(state, noteData) {
+    state.openNote = noteData
+  },
+  resetOpenNote(state) {
+    state.openNote = {}
   }
 }
 
@@ -31,6 +41,12 @@ const actions = {
   },
   removeNote({ commit }, id) {
     commit('removeNote', id)
+  },
+  setOpenNote({ commit }, noteData) {
+    commit('setOpenNote', noteData)
+  },
+  resetOpenNote({ commit }) {
+    commit('resetOpenNote')
   }
 }
 

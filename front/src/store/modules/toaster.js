@@ -18,9 +18,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getToast({
-      commit
-    }, toast) {
+    getToast({ commit }, toast) {
       toast.color = toast.color || 'error'
       toast.timeout = toast.timeout || 4000
       commit('setToast', toast)

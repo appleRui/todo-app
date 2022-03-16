@@ -35,8 +35,8 @@
         </thead>
         <tbody>
           <tr v-for="note in notes" :key="note.id">
-            <td>
-              <a class="text-black note-link" href="#">{{ note.title }}</a>
+            <td @click="onClickDialog(note.id)" style="cursor: pointer">
+              {{ note.title }}
             </td>
             <td>{{ dateFormat(note.created_at) }}</td>
             <td>
@@ -52,26 +52,38 @@
     <router-link to="/draft" class="add-note-btn">
       <v-icon color="white">mdi-notebook-plus</v-icon>
     </router-link>
+    <Dialog />
   </div>
 </template>
 
 <script>
 import axios from '@/services/http'
-import storeToast from '@/store/modules/toaster'
+import Dialog from '@/components/Modules/TheBaseDialog.vue'
+import toastStore from '@/store/modules/toaster'
+import dialogStore from '@/store/modules/dialog'
 import dayjs from 'dayjs'
 
 export default({
+  components: {
+    Dialog
+  },
   data() {
-    return {}
+    return {
+    }
   },
   methods: {
+    async onClickDialog(noteId){
+      const noteData = await axios.get(`/api/v1/notes/${noteId}`)
+      this.$store.dispatch('note/setOpenNote', noteData.data.note)
+      dialogStore.commit('open', 'TheNote')
+    },
     async noteDestroy(noteId){
       try{
         const res = confirm('本当に削除しますか？')
         if(res){
           await axios.delete(`/api/v1/notes/${noteId}`)
           this.$store.dispatch('note/removeNote', noteId)
-          storeToast.dispatch('getToast', {msg: '削除しました', color: 'success', timeout: 4000})
+          toastStore.dispatch('getToast', {msg: '削除しました', color: 'success', timeout: 4000})
         }
       }catch(error){
         console.error(error)

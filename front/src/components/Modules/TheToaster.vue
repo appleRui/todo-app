@@ -12,9 +12,11 @@ import store from '@/store/modules/toaster'
 
 export default {
   computed: {
+    // stateのデータを取得する
     toast () {
       return store.state.toast
     },
+    // getでmsgがあればtrue
     setSnackbar: {
       get () {
         return !!this.toast.msg
