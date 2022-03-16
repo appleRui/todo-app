@@ -1,5 +1,3 @@
-// import remove from 'lodash/remove'
-
 const state = {
   notes: [],
   remenberNote: {},

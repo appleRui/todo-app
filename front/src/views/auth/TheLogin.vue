@@ -45,7 +45,7 @@ import axios from 'axios';
 import auth from '@/services/auth';
 import store from '@/store/index';
 import toasterStore from '@/store/modules/toaster';
-import theToaster from '@/components/ui/TheToaster.vue';
+import theToaster from '@/components/Modules/TheToaster.vue';
 
 export default {
     name: "TheLogin",
