@@ -73,7 +73,7 @@ export default({
       drawer: false,
       note: {
         title: '',
-        content: '# テスト'
+        content: ''
       },
       toolbars: {
         bold: true,
@@ -131,9 +131,6 @@ export default({
     async closeAndSave(){
       await this.save(this.note)
       this.$router.push('/notes')
-    },
-    IsEntered(){
-      return this.note.title || this.note.content
     }
   },
   computed: {
@@ -145,14 +142,15 @@ export default({
     }
   },
   async beforeRouteLeave(to, from, next) {
-    console.log(this.isClickedSavedBtn || !this.IsEnteredTitle)
-    if(this.isClickedSavedBtn || !this.IsEnteredTitle){
-      const res = confirm('保存しますか？') 
+    if(this.isClickedSavedBtn) next()
+    if(!this.isClickedSavedBtn && !this.IsEnteredTitle){
+      const res = confirm('保存しますか？')
       if(res){
-        await this.save(this.note)
+        this.save(this.note)
+        next()
+      }else{
         next()
       }
-    }else{
       next()
     }
     next()
