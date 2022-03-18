@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.todos{
+.todos {
   margin-top: 2rem;
 }
 .todo-inner__checkbox {
@@ -129,14 +129,14 @@
 <script>
 import axios from '@/services/http'
 import find from 'lodash/find'
-import store from '@/store/todo'
+import dayjs from '@/services/day'
 
 export default {
   data() {
     return {
       newTodo: {
         name: '',
-        date: null,
+        date: dayjs.yyyymmdd(),
         content: '',
       },
       text: '',
@@ -150,8 +150,8 @@ export default {
     async addTodo(){
       try{
         const newTodo = await axios.post(`/api/v1/todos`, this.newTodo)
-        store.commit('addTodo', newTodo.data.new_todo)
-        this.newTodo = {}
+        this.$store.commit('todo/addTodo', newTodo.data.new_todo)
+        this.newTodo = {date: dayjs.yyyymmdd()}
         this.dialog =false
       }catch(e){
         console.error(e)
@@ -159,9 +159,9 @@ export default {
     },
     async done(id){
       try{
-        var item = find(store.state.todos, {id: id})
+        var item = find(this.$store.getters['todo/todos'], {id: id})
         await axios.patch(`/api/v1/todos/${item.id}`, {check: true})
-        store.commit('setRemenberTodo', item)
+        this.$store.commit('todo/setRemenberTodo', item)
         this.text = `${item.name}が削除されました`
         this.snackbar = true
       }catch(e){
@@ -170,9 +170,9 @@ export default {
     },
     async reverse(){
       try{
-        var RemenberTodo = store.state.remenberTodo
+        var RemenberTodo = this.$store.getters['todo/remenberTodo']
         await axios.patch(`/api/v1/todos/${RemenberTodo.id}`, {check: false})
-        var item = find(store.state.todos, {id: RemenberTodo.id})
+        var item = find(this.$store.getters['todo/todos'], {id: RemenberTodo.id})
         item.check = false
         this.snackbar = false
       }catch(e){
@@ -182,7 +182,7 @@ export default {
   },
   computed:{
     todos() {
-      return store.state.todos.filter((item) => item.check === false)
+      return  this.$store.getters['todo/todos'].filter((item) => item.check === false)
     },
     disabled() {
         return !this.newTodo.name

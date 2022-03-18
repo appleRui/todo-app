@@ -23,7 +23,6 @@ import TheHeader from '@/components/TheHeader/TheHeader.vue'
 import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
 import TheToaster from '@/components/Modules/TheToaster.vue'
 import axios from '@/services/http'
-import Todotore from '@/store/todo'
 
 export default ({
   name: 'TheRoot',
@@ -35,7 +34,7 @@ export default ({
   async created() {
     try{
       const todos = await axios.get(`/api/v1/todos`)
-      Todotore.commit('setTodos', todos.data.todos)
+      this.$store.commit('todo/setTodos', todos.data.todos)
       const notes = await axios.get(`/api/v1/notes`)
       this.$store.dispatch('note/setNotes', notes.data.notes)
     }catch(e){
