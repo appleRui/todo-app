@@ -5,37 +5,40 @@
 </style>
 
 <template>
-  <v-dialog v-model="setDialog" max-width="960">
+  <v-dialog width="auto" v-model="setDialog">
     <component :is="setComponent"></component>
   </v-dialog>
 </template>
 
 <script>
-import dialogStore from '@/store/modules/dialog'
+import store from '@/store/modules/dialog'
 import TheNote from '@/components/TheNote/TheNote.vue'
+import AddForm from '@/components/TheTodo/AddForm.vue'
 
 export default {
   data() {
     return{}
   },
   components:{
-    TheNote
+    TheNote,
+    AddForm
   },
   methods: {
     close(){
-      dialogStore.commit('close')
+      store.commit('close')
     }
   },
   computed: {
     storeData () {
-      return dialogStore.state
+      console.log(store.state)
+      return store.state
     },
     setDialog: {
       get () {
         return this.storeData.dialog
       },
       set () {
-        return dialogStore.commit('close')
+        return store.commit('close')
       }
     },
     setComponent: {

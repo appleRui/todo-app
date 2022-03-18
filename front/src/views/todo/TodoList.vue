@@ -34,7 +34,7 @@
             <td>{{ item.date }}</td>
             <td>{{ item.content }}</td>
           </tr>
-          <tr style="cursor: pointer" @click="dialog = true">
+          <tr style="cursor: pointer" @click="onClickDialog('AddForm')">
             <td colspan="4">
               <v-icon>mdi-pencil-plus</v-icon><span>タスク追加</span>
             </td>
@@ -55,107 +55,31 @@
         </template>
       </v-snackbar>
     </div>
-
-    <!-- dialog -->
-    <div class="text-center">
-      <v-dialog v-model="dialog" width="550">
-        <v-card>
-          <v-card-title class="text-h5 grey lighten-2">
-            タスク追加
-          </v-card-title>
-
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newTodo.name"
-                    label="タスク名"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-menu
-                    ref="formCalendar"
-                    v-model="formCalendar"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="newTodo.date"
-                        label="日付"
-                        hint="フォーマット：年-月-日"
-                        persistent-hint
-                        prepend-icon="mdi-calendar"
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="newTodo.date"
-                      no-title
-                      locale="jp-ja"
-                      @input="formCalendar = false"
-                      :day-format="(date) => new Date(date).getDate()"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="newTodo.content"
-                    label="説明"
-                    required
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text :disabled="disabled" @click="addTodo">
-              追加する
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+    <Dialog />
   </div>
 </template>
 
 <script>
+import Dialog from '@/components/Modules/TheBaseDialog.vue'
 import axios from '@/services/http'
+import store from '@/store/modules/dialog'
 import find from 'lodash/find'
-import dayjs from '@/services/day'
 
 export default {
+  components: {
+    Dialog
+  },
   data() {
     return {
-      newTodo: {
-        name: '',
-        date: dayjs.yyyymmdd(),
-        content: '',
-      },
       text: '',
       snackbar: false,
       timeout: 3000,
       dialog: false,
-      formCalendar: false
     }
   },
   methods: {
-    async addTodo(){
-      try{
-        const newTodo = await axios.post(`/api/v1/todos`, this.newTodo)
-        this.$store.commit('todo/addTodo', newTodo.data.new_todo)
-        this.newTodo = {date: dayjs.yyyymmdd()}
-        this.dialog =false
-      }catch(e){
-        console.error(e)
-      }
+    onClickDialog(componentName){
+      store.commit('open', componentName)
     },
     async done(id){
       try{
@@ -184,9 +108,6 @@ export default {
     todos() {
       return  this.$store.getters['todo/todos'].filter((item) => item.check === false)
     },
-    disabled() {
-        return !this.newTodo.name
-      }
   }
 }
 </script>
