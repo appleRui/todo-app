@@ -17,6 +17,9 @@
 .v-note-panel {
   min-height: 82vh;
 }
+.v-note-wrapper{
+  z-index: 0;
+}
 </style>
 
 <template>
