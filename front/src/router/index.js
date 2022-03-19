@@ -39,6 +39,10 @@ const routes = [{
         path: 'draft',
         component: () => import('@/views/note/TheDraft.vue')
       },
+      {
+        path: 'schedule',
+        component: () => import('@/views/schedule/TheSchedule.vue')
+      },
     ]
   },
 ]
