@@ -11,10 +11,11 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     open(state, componentName) {
-      state.component.push(componentName)
+      state.component.unshift(componentName)
       state.dialog = true
     },
     close(state) {
+      state.component.shift()
       state.dialog = false
     }
   },

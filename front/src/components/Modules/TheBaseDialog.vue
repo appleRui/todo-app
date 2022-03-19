@@ -30,7 +30,6 @@ export default {
   },
   computed: {
     storeData () {
-      console.log(store.state)
       return store.state
     },
     setDialog: {
