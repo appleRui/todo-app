@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import note from '@/store/note'
 import todo from '@/store/todo'
+import schedule from '@/store/schedule'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     note,
-    todo
+    todo,
+    schedule
   },
   state: {
     user: null,

@@ -2,7 +2,7 @@ class Api::V1::NotesController < ApplicationController
   before_action :isAuthenticate
 
   def index
-    notes = current_user.notes.order(created_at: :asc).as_json(except: [:user_id]) if @result
+    notes = current_user.notes.order(created_at: :desc).as_json(except: [:user_id]) if @result
     res = {result: @result, logout: @logout, notes: notes}
     render json: res
   end

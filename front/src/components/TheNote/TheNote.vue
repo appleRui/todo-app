@@ -1,4 +1,7 @@
 <style lang="scss">
+pre{
+  background-color: rgb(247, 246, 243);
+}
 .note {
   min-height: 810px;
   &__ttl-inner {
@@ -10,15 +13,20 @@
   &__content-inner {
     padding: 0 13%;
   }
-  .v-note-wrapper .v-note-panel .v-note-show .v-show-content{
+  .v-note-wrapper .v-note-panel .v-note-show .v-show-content {
     padding: 0;
   }
 }
-
+.theme--light.v-application code {
+  background-color: rgba(0, 0, 0, 0);
+}
+.markdown-body .hljs{
+  background: #f6f8fa;
+}
 </style>
 
 <template>
-  <v-card class="note py-10" width='960'>
+  <v-card class="note py-10" width="960">
     <div class="note__ttl-inner">
       <h1 class="note__ttl-inner__ttl my-3 font-weight-black">
         {{ note.title }}
@@ -28,13 +36,13 @@
     <div class="note__content-inner">
       <div class="note__content-inner__txt mt-3">
         <mavon-editor
-          :boxShadow=false
+          :boxShadow="false"
           defaultOpen="preview"
-          style="border: none;"
+          style="border: none"
           language="ja"
           previewBackground="#FFFFFF"
-          :subfield=false
-          :toolbarsFlag=false
+          :subfield="false"
+          :toolbarsFlag="false"
           v-model="note.content"
         />
       </div>

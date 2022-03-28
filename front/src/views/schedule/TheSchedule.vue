@@ -30,6 +30,21 @@
         outlined
         hide-details
       ></v-select>
+
+      <v-menu bottom offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn primary icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item @click="RelationWithGoogleCalendar">
+            <v-icon class="mr-2">mdi-google</v-icon>
+            <v-list-item-title>Google Calenderと連携</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-sheet>
     <v-calendar
       ref="calendar"
@@ -37,46 +52,40 @@
       locale="ja-jp"
       color="primary"
       :type="type.value"
-      :events="events"
+      :events="schedules"
       :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-      @change="getEvents"
     ></v-calendar>
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import GoogleCalendar from '@/mixins/GoogleCalendar'
 const day = new dayjs()
 
 export default {
+  mixins: [ GoogleCalendar ],
   data() {
     return {
-      events: [],
       value: day.format('YYYY-MM-DD'),
       type: {name: '月', value: 'month'},
       types: [{name: '月', value: 'month'}, {name: '週', value: 'week'}],
     }
   },
   methods: {
-    getEvents() {
-      const events = [
-        {
-          name: '会議',
-          start: new Date('2022-03-19T01:00:00'),
-          end: new Date('2022-03-21T02:00:00'),
-          color: 'blue',
-          timed: true,
-        },
-      ];
-      this.events = events;
-    },
     setToday() {
       this.value = day.format('YYYY-MM-DD')
     },
+    RelationWithGoogleCalendar(){
+      this.handleClientLoad()
+    }
   },
   computed: {
     title() {
       return new dayjs(this.value).format('MM-YYYY')
+    },
+    schedules() {
+      return  this.$store.getters['schedule/schedules']
     }
   }
 }

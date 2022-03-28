@@ -32,7 +32,7 @@ services:
       context: ./front
       args:
         WORKDIR: $WORKDIR
-        baseURL: "localhost:$API_PORT"
+        BASEURL: "localhost:$API_PORT"
     command: yarn serve
     volumes:
       - ./front:/$WORKDIR

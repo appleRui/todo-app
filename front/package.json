@@ -47,6 +47,10 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
+    "globals": {
+      "Vue": true,
+      "gapi": true
+    },
     "rules": {}
   },
   "browserslist": [
