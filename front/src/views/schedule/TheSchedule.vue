@@ -43,6 +43,10 @@
             <v-icon class="mr-2">mdi-google</v-icon>
             <v-list-item-title>Google Calenderと連携</v-list-item-title>
           </v-list-item>
+          <v-list-item @click="onClickList">
+            <v-icon class="mr-2">mdi-google</v-icon>
+            <v-list-item-title>カレンダーを選択</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-sheet>
@@ -55,15 +59,22 @@
       :events="schedules"
       :day-format="(timestamp) => new Date(timestamp.date).getDate()"
     ></v-calendar>
+    <Dialog />
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
 import GoogleCalendar from '@/mixins/GoogleCalendar'
+import dialogStore from '@/store/modules/dialog'
+import Dialog from '@/components/Modules/TheBaseDialog.vue'
+
 const day = new dayjs()
 
 export default {
+  components: {
+    Dialog
+  },
   mixins: [ GoogleCalendar ],
   data() {
     return {
@@ -78,6 +89,9 @@ export default {
     },
     RelationWithGoogleCalendar(){
       this.handleClientLoad()
+    },
+    onClickList(){
+      dialogStore.commit('open', 'ScheduleList')
     }
   },
   computed: {

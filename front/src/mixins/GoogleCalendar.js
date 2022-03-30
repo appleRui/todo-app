@@ -1,25 +1,21 @@
+import axios from '@/services/http'
+import dialogStore from '@/store/modules/dialog'
+import toastStore from '@/store/modules/toaster'
+
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
 const SCOPES = "https://www.googleapis.com/auth/calendar.readonly"
-const now = new Date()
-const TwoMonthBeforeFromNow = now.setMonth(now.getMonth() - 2)
 
 export default {
-  /*--------------------------------------------------
-    mounted
-  -------------------------------------------------*/
+
   mounted() {
     const script = document.createElement('script')
     script.src = 'https://apis.google.com/js/api.js'
-    script.onreadystatechange = script.onload = function () {
-      console.log('Loaded with gapi')
-    }
+    script.onreadystatechange = script.onload = function () {}
     document.head.appendChild(script)
   },
-  /*--------------------------------------------------
-    methods
-  --------------------------------------------------*/
+
   methods: {
-    handleClientLoad() {
+    async handleClientLoad() {
       gapi.load('client:auth2', this.initClient)
     },
     initClient() {
@@ -29,37 +25,24 @@ export default {
         discoveryDocs: DISCOVERY_DOCS,
         scope: SCOPES
       })
-
-      gapi.auth2.getAuthInstance().signIn()
-        .then(() => {
-          gapi.client.calendar.events.list({
-            'calendarId': 'primary',
-            'timeMin': (new Date(TwoMonthBeforeFromNow)).toISOString(),
-            'showDeleted': false,
-            'singleEvents': true,
-            'maxResults': 300,
-            'orderBy': 'startTime'
+      if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        gapi.auth2.getAuthInstance().signIn()
+          .then(async (res) => {
+            console.log(res.wc.access_token)
+            await this.onGoogleCalendarDialog(res.wc.access_token)
           })
-            .then((response) => {
-              var events = response.result.items
-              var array = []
-              events.forEach(element => {
-                console.log(element)
-                var summary = element.summary
-                var start = element.start.dateTime
-                var end = element.end.dateTime
-                var event = {
-                  name: summary,
-                  start: new Date(start),
-                  end: new Date(end),
-                  color: 'primary',
-                  timed: true
-                }
-                array.push(event)
-              })
-              this.$store.commit('schedule/setSchedule', array)
-            })
-        })
+      } else {
+        toastStore.dispatch('getToast', {msg: '既に認証しています'})
+      }
     },
+    async onGoogleCalendarDialog(code) {
+      const {
+        data
+      } = await axios.get('/api/v1/schedules', {
+        code: code
+      })
+      this.$store.commit('schedule/setScheduleList', data.items)
+      dialogStore.commit('open', 'ScheduleList')
+    }
   },
 }

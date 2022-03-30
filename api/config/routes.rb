@@ -10,7 +10,8 @@ Rails.application.routes.draw do
       end
       resources :todos, only: [:index, :create, :update]
       resources :notes, only: [:index, :create, :destroy, :show]
-      
+      resources :schedules, only: [:index]
+      get 'schedules/events', action: :events, controller: 'schedules'
       # login, logout
       resources :user_token, only: [:create] do
         delete :destroy, on: :collection
