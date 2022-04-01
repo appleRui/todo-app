@@ -35,14 +35,13 @@ export default {
               code: code,
               exp: exp
             })
-            // await this.onGoogleCalendarDialog(res.wc.access_token)
+            await this.onGoogleCalendarDialog(res.wc.access_token)
           })
       } else {
         toastStore.dispatch('getToast', {msg: '既に認証しています'})
       }
     },
     async setToken(data) {
-      console.log(data)
       await axios.post('api/v1/setToken', {
         code: data.code,
         exp: data.exp

@@ -17,7 +17,7 @@
       <v-btn icon @click="$refs.calendar.next()">
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="mx-5">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-select
         class="ma-2 type-select"
@@ -57,7 +57,8 @@
       color="primary"
       :type="type.value"
       :events="schedules"
-      :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+      :month-format="() => ''"
+      :day-format='(timestamp) => new Date(timestamp.date).getDate()'
     ></v-calendar>
     <Dialog />
   </div>
@@ -92,11 +93,11 @@ export default {
     },
     onClickList(){
       dialogStore.commit('open', 'ScheduleList')
-    }
+    },
   },
   computed: {
     title() {
-      return new dayjs(this.value).format('MM-YYYY')
+      return new dayjs(this.value).format('YYYY年 MM月')
     },
     schedules() {
       return  this.$store.getters['schedule/schedules']
