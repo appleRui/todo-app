@@ -48,9 +48,7 @@ export default {
       })
     },
     async onGoogleCalendarDialog() {
-      const {
-        data
-      } = await axios.get('/api/v1/schedules')
+      const { data } = await axios.get('/api/v1/schedules')
       const isError = get(data, 'error', false)
       if (!isError) {
         this.$store.commit('schedule/setScheduleList', data.items)

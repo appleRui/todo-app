@@ -37,6 +37,8 @@ export default ({
       this.$store.commit('todo/setTodos', todos.data.todos)
       const notes = await axios.get(`/api/v1/notes`)
       this.$store.dispatch('note/setNotes', notes.data.notes)
+      const isGoogleLogged = await axios.get(`/api/v1/schedules/isauth`)
+      this.$store.dispatch('setIsGoogleAuth', isGoogleLogged.data)
     }catch(e){
       console.error(e)
     }

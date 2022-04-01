@@ -17,9 +17,8 @@ export default new Vuex.Store({
     remenberRoute: {
       path: '/',
       name: 'TheHome'
-    }
-  },
-  getters: {
+    },
+    isGoogleAuth: false
   },
   mutations: {
     setCurrentUser(state, paylaod) {
@@ -27,6 +26,9 @@ export default new Vuex.Store({
     },
     setRemenberRoute(state, to) {
       state.remenberRoute = to
+    },
+    setIsGoogleAuth(state, result) {
+      state.isGoogleAuth = result
     }
   },
   actions: {
@@ -35,6 +37,9 @@ export default new Vuex.Store({
     },
     setRemenberRoute({ commit }, to) {
       commit('setRemenberRoute', to)
+    },
+    setIsGoogleAuth({ commit }, result) {
+      commit('setIsGoogleAuth', result)
     }
   },
 })

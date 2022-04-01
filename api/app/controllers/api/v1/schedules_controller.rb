@@ -30,6 +30,11 @@ class Api::V1::SchedulesController < ApplicationController
     render json: res
   end
 
+  def isauth
+    result = cookies[token].present? ? true : false
+    render json: result
+  end
+
   private
 
   def token_params

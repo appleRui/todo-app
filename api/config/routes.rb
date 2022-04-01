@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :todos, only: [:index, :create, :update]
       resources :notes, only: [:index, :create, :destroy, :show]
       resources :schedules, only: [:index]
+      get 'schedules/isauth', action: :isauth, controller: 'schedules'
       get 'schedules/events', action: :events, controller: 'schedules'
       post 'setToken', action: :create, controller: 'schedules'
       # login, logout

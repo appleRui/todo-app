@@ -1,3 +1,5 @@
+import get from 'lodash/get'
+
 const state = {
   schedules: [],
   list: [],
@@ -17,9 +19,12 @@ const getters = {
 }
 
 const mutations = {
-  setSchedule(state, events) {
-    events.forEach(event => {
+  setSchedule(state, params) {
+    params.events.forEach(event => {
       const data = {
+        id: event.id,
+        calendarId: params.calendarId,
+        description: get(event, 'description', null),
         name: event.summary,
         start: new Date(event.start.dateTime),
         end: new Date(event.end.dateTime),
@@ -28,22 +33,25 @@ const mutations = {
       state.schedules.push(data)
     });
   },
+  resetSchedules(state) {
+    state.schedules = []
+  },
+  setSelected(state, selectedId) {
+    state.selected.push(selectedId)
+  },
+  resetSelected(state) {
+    state.selected = []
+  },
   setScheduleList(state, selectedIds) {
     state.list = []
     selectedIds.forEach(selectedId => {
       state.list.push(selectedId)
     });
   },
-  setSelected(state, selecteds) {
-    state.selected = []
-    selecteds.forEach(selected => {
-      state.selected.push(selected)
-    });
-  },
 }
 const actions = {}
 
-const todo = {
+const schedule = {
   namespaced: true,
   state,
   actions,
@@ -51,4 +59,4 @@ const todo = {
   mutations
 }
 
-export default todo
+export default schedule

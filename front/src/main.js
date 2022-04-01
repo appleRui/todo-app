@@ -11,6 +11,10 @@ Vue.config.productionTip = false
 // mavonEditer
 Vue.use(mavonEditor)
 
+// vue-cookie
+import VueCookie from 'vue-cookies';
+Vue.use(VueCookie);
+
 new Vue({
   router,
   store,

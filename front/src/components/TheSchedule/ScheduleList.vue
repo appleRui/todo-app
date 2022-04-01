@@ -42,28 +42,29 @@ export default ({
   },
   methods: {
     close(){
-      this.$store.commit('schedule/setSelected', this.selected)
+      this.selected = []
       dialog.commit('close')
     },
     async getScheduleEvents(){
-      this.$store.commit('schedule/setSelected', this.selected)
+      this.$store.commit('schedule/resetSchedules')
+      this.$store.commit('schedule/resetSelected')
       await this.selected.forEach(async selectedId => {
+        this.$store.commit('schedule/setSelected', selectedId)
         const { data } = await axios.get('/api/v1/schedules/events', {
           calendarId: selectedId
         })
-        await this.$store.commit('schedule/setSchedule', data.items)
+        await this.$store.commit('schedule/setSchedule', {
+          calendarId: selectedId,
+          events: data.items
+        })
       });
       dialog.commit('close')
     }
   },
   computed: {
     sheduleList(){
-      const lists = this.$store.getters['schedule/list']
-      lists.forEach((list) => {
-        if(list.primary) this.selected.push(list.id)
-      })
-      return lists;
-    }
+      return this.$store.getters['schedule/list']
+    },
   }
 
 })
