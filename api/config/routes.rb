@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :notes, only: [:index, :create, :destroy, :show]
       resources :schedules, only: [:index]
       get 'schedules/events', action: :events, controller: 'schedules'
+      post 'setToken', action: :create, controller: 'schedules'
       # login, logout
       resources :user_token, only: [:create] do
         delete :destroy, on: :collection

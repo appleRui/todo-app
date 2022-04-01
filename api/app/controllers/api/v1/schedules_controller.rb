@@ -1,11 +1,18 @@
 class Api::V1::SchedulesController < ApplicationController
 
-  def index
-    cookies[token] = {
-      value: params[:code],
+  
+  def create
+    cookie_token = {
+      value: token_params['code'],
+      expires: Time.at(token_params['exp'] / 1000),
       secure: Rails.env.production?,
       http_only: true
     }
+    cookies[token] = cookie_token
+    head(:ok)
+  end
+
+  def index
     http = GoogleCalendar::Client.new(code: params[:code])
     res = http.get(url: '/calendar/v3/users/me/calendarList')
     render json: res
@@ -21,6 +28,12 @@ class Api::V1::SchedulesController < ApplicationController
       'singleEvents': true
     })
     render json: res
+  end
+
+  private
+
+  def token_params
+    params.require(:params).permit(:code, :exp)
   end
 
 end
