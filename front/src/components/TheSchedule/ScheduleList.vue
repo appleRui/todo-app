@@ -11,8 +11,8 @@
         <v-container>
           <v-checkbox
             v-for="item in sheduleList"
-            :key="item.id"
             v-model="selected"
+            :key="item.id"
             :label="item.summary"
             :value="item.id"
           ></v-checkbox>
@@ -58,7 +58,11 @@ export default ({
   },
   computed: {
     sheduleList(){
-      return  this.$store.getters['schedule/list']
+      const lists = this.$store.getters['schedule/list']
+      lists.forEach((list) => {
+        if(list.primary) this.selected.push(list.id)
+      })
+      return lists;
     }
   }
 

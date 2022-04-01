@@ -29,6 +29,7 @@ const mutations = {
     });
   },
   setScheduleList(state, selectedIds) {
+    state.list = []
     selectedIds.forEach(selectedId => {
       state.list.push(selectedId)
     });

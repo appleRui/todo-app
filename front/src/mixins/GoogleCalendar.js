@@ -35,7 +35,7 @@ export default {
               code: code,
               exp: exp
             })
-            await this.onGoogleCalendarDialog(res.wc.access_token)
+            await this.onGoogleCalendarDialog
           })
       } else {
         toastStore.dispatch('getToast', {msg: '既に認証しています'})
@@ -47,14 +47,19 @@ export default {
         exp: data.exp
       })
     },
-    async onGoogleCalendarDialog(code) {
+    async onGoogleCalendarDialog() {
       const {
         data
-      } = await axios.get('/api/v1/schedules', {
-        code: code
-      })
-      this.$store.commit('schedule/setScheduleList', data.items)
-      dialogStore.commit('open', 'ScheduleList')
+      } = await axios.get('/api/v1/schedules')
+      const isError = get(data, 'error', false)
+      if (!isError) {
+        this.$store.commit('schedule/setScheduleList', data.items)
+        dialogStore.commit('open', 'ScheduleList')
+      } else {
+        toastStore.dispatch('getToast', {
+          msg: '認証していません'
+        })
+      }
     }
   },
 }

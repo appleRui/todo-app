@@ -13,7 +13,7 @@ class Api::V1::SchedulesController < ApplicationController
   end
 
   def index
-    http = GoogleCalendar::Client.new(code: params[:code])
+    http = GoogleCalendar::Client.new(code: cookies[token])
     res = http.get(url: '/calendar/v3/users/me/calendarList')
     render json: res
   end

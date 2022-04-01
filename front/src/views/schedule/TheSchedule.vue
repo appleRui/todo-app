@@ -5,6 +5,26 @@
 .type-select {
   max-width: 72px;
 }
+
+.v-current-time {
+  height: 2px;
+  background-color: #ea4335;
+  position: absolute;
+  left: -1px;
+  right: 0;
+  pointer-events: none;
+
+  &.first::before {
+    content: "";
+    position: absolute;
+    background-color: #ea4335;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: -5px;
+    margin-left: -6.5px;
+  }
+}
 </style>
 
 <template>
@@ -43,7 +63,7 @@
             <v-icon class="mr-2">mdi-google</v-icon>
             <v-list-item-title>Google Calenderと連携</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="onClickList">
+          <v-list-item @click="onGoogleCalendarDialog">
             <v-icon class="mr-2">mdi-google</v-icon>
             <v-list-item-title>カレンダーを選択</v-list-item-title>
           </v-list-item>
@@ -58,8 +78,16 @@
       :type="type.value"
       :events="schedules"
       :month-format="() => ''"
-      :day-format='(timestamp) => new Date(timestamp.date).getDate()'
-    ></v-calendar>
+      :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+    >
+      <template v-slot:day-body="{ date, week }">
+        <div
+          class="v-current-time"
+          :class="{ first: date === week[0].date }"
+          :style="{ top: nowY }"
+        ></div>
+      </template>
+    </v-calendar>
     <Dialog />
   </div>
 </template>
@@ -80,9 +108,15 @@ export default {
   data() {
     return {
       value: day.format('YYYY-MM-DD'),
-      type: {name: '月', value: 'month'},
+      ready: false,
+      type: {name: '週', value: 'week'},
       types: [{name: '月', value: 'month'}, {name: '週', value: 'week'}],
     }
+  },
+  mounted() {
+    this.ready = true
+    this.scrollToTime()
+    this.updateTime()
   },
   methods: {
     setToday() {
@@ -94,6 +128,18 @@ export default {
     onClickList(){
       dialogStore.commit('open', 'ScheduleList')
     },
+    getCurrentTime () {
+        return this.cal ? this.cal.times.now.hour * 60 + this.cal.times.now.minute : 0
+      },
+      scrollToTime () {
+        const time = this.getCurrentTime()
+        const first = Math.max(0, time - (time % 30) - 30)
+
+        this.cal.scrollToTime(first);
+      },
+      updateTime () {
+        setInterval(() => this.cal.updateTimes(), 60 * 1000)
+      },
   },
   computed: {
     title() {
@@ -101,7 +147,13 @@ export default {
     },
     schedules() {
       return  this.$store.getters['schedule/schedules']
-    }
+    },
+    cal() {
+        return this.ready ? this.$refs.calendar : null
+    },
+    nowY() {
+      return this.cal ? this.cal.timeToY(this.cal.times.now) + 'px' : '-10px'
+    },
   }
 }
 </script>
