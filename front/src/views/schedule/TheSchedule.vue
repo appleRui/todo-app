@@ -59,11 +59,11 @@
         </template>
 
         <v-list>
-          <v-list-item v-if="!this.$store.state.isGoogleAuth" @click="RelationWithGoogleCalendar">
+          <v-list-item v-if="!disabled" @click="RelationWithGoogleCalendar">
             <v-icon class="mr-2">mdi-google</v-icon>
             <v-list-item-title>Google Calenderと連携</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="this.$store.state.isGoogleAuth" @click="onGoogleCalendarDialog">
+          <v-list-item v-if="disabled" @click="onGoogleCalendarDialog">
             <v-icon class="mr-2">mdi-google</v-icon>
             <v-list-item-title>カレンダーを選択</v-list-item-title>
           </v-list-item>
@@ -153,6 +153,9 @@ export default {
     nowY() {
       return this.cal ? this.cal.timeToY(this.cal.times.now) + 'px' : '-10px'
     },
+    disabled(){
+      return this.$store.state.isGoogleAuth
+    }
   }
 }
 </script>

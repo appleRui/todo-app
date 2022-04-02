@@ -21,14 +21,20 @@ const getters = {
 const mutations = {
   setSchedule(state, params) {
     params.events.forEach(event => {
+      const summary = get(event, 'summary', 'タイトルなし')
+      const description = get(event, 'description', null)
+      const start = get(event, 'start.dateTime', event.start.date)
+      const end = get(event, 'end.dateTime', event.end.date)
+      const timed = start.length !== 10
+
       const data = {
         id: event.id,
         calendarId: params.calendarId,
-        description: get(event, 'description', null),
-        name: event.summary,
-        start: new Date(event.start.dateTime),
-        end: new Date(event.end.dateTime),
-        timed: true
+        description: description,
+        name: summary,
+        start: new Date(start),
+        end: new Date(end),
+        timed: timed
       }
       state.schedules.push(data)
     });
@@ -36,11 +42,8 @@ const mutations = {
   resetSchedules(state) {
     state.schedules = []
   },
-  setSelected(state, selectedId) {
-    state.selected.push(selectedId)
-  },
-  resetSelected(state) {
-    state.selected = []
+  setSelected(state, selectedIds) {
+    state.selected = selectedIds
   },
   setScheduleList(state, selectedIds) {
     state.list = []

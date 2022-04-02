@@ -1,6 +1,7 @@
 import axios from '@/services/http'
 import dialogStore from '@/store/modules/dialog'
 import toastStore from '@/store/modules/toaster'
+import dialog from '@/store/modules/dialog'
 import get from 'lodash/get'
 
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
@@ -58,6 +59,23 @@ export default {
           msg: '認証していません'
         })
       }
+    },
+    async getScheduleEvents(calendarIds) {
+      this.$store.commit('schedule/resetSchedules')
+      this.$store.commit('schedule/setSelected', calendarIds)
+      localStorage.setItem('calendar_ids', calendarIds)
+      await calendarIds.forEach(async selectedId => {
+        const {
+          data
+        } = await axios.get('/api/v1/schedules/events', {
+          calendarId: selectedId
+        })
+        await this.$store.commit('schedule/setSchedule', {
+          calendarId: selectedId,
+          events: data.items
+        })
+      });
+      dialog.commit('close')
     }
   },
 }

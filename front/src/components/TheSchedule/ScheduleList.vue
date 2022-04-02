@@ -21,7 +21,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" text @click="close"> キャンセル </v-btn>
-        <v-btn color="primary" text @click="getScheduleEvents"> 決定 </v-btn>
+        <v-btn color="primary" text @click="getScheduleEvents(selected)"> 決定 </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -29,14 +29,14 @@
 
 <script>
 import dialog from "@/store/modules/dialog"
-import axios from '@/services/http'
-
+import GoogleCalendar from "@/mixins/GoogleCalendar"
 export default ({
   data() {
     return {
       selected: [],
     }
   },
+  mixins: [ GoogleCalendar ],
   created() {
     this.selected = this.$store.getters['schedule/selected']
   },
@@ -45,21 +45,6 @@ export default ({
       this.selected = []
       dialog.commit('close')
     },
-    async getScheduleEvents(){
-      this.$store.commit('schedule/resetSchedules')
-      this.$store.commit('schedule/resetSelected')
-      await this.selected.forEach(async selectedId => {
-        this.$store.commit('schedule/setSelected', selectedId)
-        const { data } = await axios.get('/api/v1/schedules/events', {
-          calendarId: selectedId
-        })
-        await this.$store.commit('schedule/setSchedule', {
-          calendarId: selectedId,
-          events: data.items
-        })
-      });
-      dialog.commit('close')
-    }
   },
   computed: {
     sheduleList(){
