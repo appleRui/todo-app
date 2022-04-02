@@ -73,8 +73,12 @@ export default ({
   },
   methods: {
     logout(){
+      this.$store.commit('loading/loading')
       auth.logout()
-      this.$router.push('/login')
+      setTimeout(() => {
+        this.$store.commit('loading/close')
+        this.$router.push('/login')
+      }, 1500)
     }
   },
   computed: {

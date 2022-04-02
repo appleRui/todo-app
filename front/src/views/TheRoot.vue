@@ -35,17 +35,19 @@ export default ({
   mixins: [ GoogleCalendar ],
   async created() {
     try{
+      this.$store.commit('loading/loading')
       const todos = await axios.get(`/api/v1/todos`)
-      const notes = await axios.get(`/api/v1/notes`)
-      const isGoogleLogged = await axios.get(`/api/v1/schedules/isauth`)
       this.$store.commit('todo/setTodos', todos.data.todos)
+      const notes = await axios.get(`/api/v1/notes`)
       this.$store.dispatch('note/setNotes', notes.data.notes)
+      const isGoogleLogged = await axios.get(`/api/v1/schedules/isauth`)
       this.$store.dispatch('setIsGoogleAuth', isGoogleLogged.data)
-      if(isGoogleLogged){
+      if(isGoogleLogged.data){
         const savedCalendarIds = localStorage.getItem('calendar_ids')
         const calendarIds = savedCalendarIds.split(',')
         this.getScheduleEvents(calendarIds)
       }
+      this.$store.commit('loading/close')
     }catch(e){
       console.error(e)
     }
