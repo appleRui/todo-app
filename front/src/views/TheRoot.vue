@@ -35,7 +35,7 @@ export default ({
   mixins: [ GoogleCalendar ],
   async created() {
     try{
-      this.$store.commit('loading/loading')
+      this.$store.commit('spinner/loading')
       const todos = await axios.get(`/api/v1/todos`)
       this.$store.commit('todo/setTodos', todos.data.todos)
       const notes = await axios.get(`/api/v1/notes`)
@@ -47,7 +47,7 @@ export default ({
         const calendarIds = savedCalendarIds.split(',')
         this.getScheduleEvents(calendarIds)
       }
-      this.$store.commit('loading/close')
+      this.$store.commit('spinner/close')
     }catch(e){
       console.error(e)
     }

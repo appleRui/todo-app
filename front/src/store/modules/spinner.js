@@ -11,10 +11,10 @@ const mutations = {
     }
 }
 
-const loading = {
+const spinner = {
   namespaced: true,
   state,
   mutations
 }
 
-export default loading
+export default spinner

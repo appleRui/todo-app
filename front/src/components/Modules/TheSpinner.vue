@@ -13,14 +13,14 @@
 export default {
   computed: {
     state() {
-      return this.$store.state.loading
+      return this.$store.state.spinner
     },
     setValue: {
       get () {
         return this.state.value
       },
       set () {
-        return this.$store.commit('loading/close')
+        return this.$store.commit('spinner/close')
       }
     },
   }
