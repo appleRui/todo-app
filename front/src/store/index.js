@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import note from '@/store/note'
 import todo from '@/store/todo'
 import schedule from '@/store/schedule'
+import loading from '@/store/modules/loading'
 
 Vue.use(Vuex)
 
@@ -10,7 +11,8 @@ export default new Vuex.Store({
   modules: {
     note,
     todo,
-    schedule
+    schedule,
+    loading
   },
   state: {
     user: null,

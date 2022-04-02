@@ -7,10 +7,12 @@
 <template>
   <v-app>
     <router-view />
+    <Loading />
   </v-app>
 </template>
 
 <script>
+import Loading from "@/components/Modules/TheLoading.vue";
 
 export default {
   name: 'App',
@@ -18,6 +20,7 @@ export default {
     return {}
   },
   components: {
+    Loading
   },
 };
 </script>
