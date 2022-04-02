@@ -62,7 +62,7 @@ export default {
     },
     methods: {
       login(){
-        this.$store.commit('loading/loading')
+        this.$store.commit('spinner/loading')
         axios.post('http://localhost:3000/api/v1/user_token', this.user, { withCredentials: true })
         .then((res) => {
           auth.login(res.data)
@@ -73,7 +73,7 @@ export default {
           // alert('ログインに失敗しました')
           toasterStore.dispatch('getToast', {msg: e.response.data.message})
         })
-      this.$store.commit('loading/close')
+      this.$store.commit('spinner/close')
       }
     },
     computed: {

@@ -7,12 +7,12 @@
 <template>
   <v-app>
     <router-view />
-    <Loading />
+    <Spinner />
   </v-app>
 </template>
 
 <script>
-import Loading from "@/components/Modules/TheLoading.vue";
+import Spinner from "@/components/Modules/TheSpinner.vue";
 
 export default {
   name: 'App',
@@ -20,7 +20,7 @@ export default {
     return {}
   },
   components: {
-    Loading
+    Spinner
   },
 };
 </script>
