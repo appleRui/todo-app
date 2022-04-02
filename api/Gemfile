@@ -52,3 +52,5 @@ gem 'hirb', '~> 0.7.3'
 gem 'hirb-unicode-steakknife', '~> 0.0.9'
 # JWT Doc: https://github.com/jwt/ruby-jwt
 gem 'jwt', '~> 2.2'
+
+gem 'faraday', '~> 2.2'

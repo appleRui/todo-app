@@ -22,6 +22,7 @@
 import TheHeader from '@/components/TheHeader/TheHeader.vue'
 import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
 import TheToaster from '@/components/Modules/TheToaster.vue'
+import GoogleCalendar from '@/mixins/GoogleCalendar'
 import axios from '@/services/http'
 
 export default ({
@@ -31,12 +32,20 @@ export default ({
     TheSidebar,
     TheToaster
   },
+  mixins: [ GoogleCalendar ],
   async created() {
     try{
       const todos = await axios.get(`/api/v1/todos`)
-      this.$store.commit('todo/setTodos', todos.data.todos)
       const notes = await axios.get(`/api/v1/notes`)
+      const isGoogleLogged = await axios.get(`/api/v1/schedules/isauth`)
+      this.$store.commit('todo/setTodos', todos.data.todos)
       this.$store.dispatch('note/setNotes', notes.data.notes)
+      this.$store.dispatch('setIsGoogleAuth', isGoogleLogged.data)
+      if(isGoogleLogged){
+        const savedCalendarIds = localStorage.getItem('calendar_ids')
+        const calendarIds = savedCalendarIds.split(',')
+        this.getScheduleEvents(calendarIds)
+      }
     }catch(e){
       console.error(e)
     }

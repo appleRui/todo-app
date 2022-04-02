@@ -2,22 +2,23 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import note from '@/store/note'
 import todo from '@/store/todo'
+import schedule from '@/store/schedule'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     note,
-    todo
+    todo,
+    schedule
   },
   state: {
     user: null,
     remenberRoute: {
       path: '/',
       name: 'TheHome'
-    }
-  },
-  getters: {
+    },
+    isGoogleAuth: false
   },
   mutations: {
     setCurrentUser(state, paylaod) {
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     },
     setRemenberRoute(state, to) {
       state.remenberRoute = to
+    },
+    setIsGoogleAuth(state, result) {
+      state.isGoogleAuth = result
     }
   },
   actions: {
@@ -33,6 +37,9 @@ export default new Vuex.Store({
     },
     setRemenberRoute({ commit }, to) {
       commit('setRemenberRoute', to)
+    },
+    setIsGoogleAuth({ commit }, result) {
+      commit('setIsGoogleAuth', result)
     }
   },
 })

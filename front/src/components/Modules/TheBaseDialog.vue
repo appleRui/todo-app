@@ -5,7 +5,7 @@
 </style>
 
 <template>
-  <v-dialog width="auto" v-model="setDialog">
+  <v-dialog width="auto" :persistent=persistent v-model="setDialog">
     <component :is="setComponent"></component>
   </v-dialog>
 </template>
@@ -14,6 +14,7 @@
 import store from '@/store/modules/dialog'
 import TheNote from '@/components/TheNote/TheNote.vue'
 import AddForm from '@/components/TheTodo/AddForm.vue'
+import ScheduleList from '@/components/TheSchedule/ScheduleList.vue'
 
 export default {
   data() {
@@ -21,7 +22,8 @@ export default {
   },
   components:{
     TheNote,
-    AddForm
+    AddForm,
+    ScheduleList
   },
   methods: {
     close(){
@@ -30,7 +32,6 @@ export default {
   },
   computed: {
     storeData () {
-      console.log(store.state)
       return store.state
     },
     setDialog: {
@@ -45,8 +46,10 @@ export default {
       get () {
         return this.storeData.component[0]
       }
+    },
+    persistent() {
+      return this.setComponent === 'ScheduleList'
     }
-
   },
 }
 </script>

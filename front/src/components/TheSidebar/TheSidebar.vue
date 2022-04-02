@@ -44,7 +44,7 @@ export default({
       items: [
           { title: 'TODOリスト', icon: 'mdi-format-list-checks', route: 'todos' },
           { title: 'ノート', icon: 'mdi-notebook', route: 'notes' },
-          // { title: 'カレンダー', icon: 'mdi-calendar' },
+          { title: 'スケジュール', icon: 'mdi-calendar', route: 'schedule'  },
         ],
     }
   },

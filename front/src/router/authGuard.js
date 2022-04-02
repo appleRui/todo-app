@@ -32,7 +32,7 @@ const authGuard = async (to, from, next) => {
       msg: "ログインが必要です"
     })
     route.push('/login')
-    // location.href = '/login'
+    // location.href =  login'
     next(false)
     return
   }
