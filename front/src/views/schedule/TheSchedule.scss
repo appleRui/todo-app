@@ -1,0 +1,24 @@
+.card{
+  &__innser{
+    background-color: #ffffff;
+    padding: 1rem;
+  }
+  &__wrap{
+    display: flex;
+    .icon-inner{
+      margin-right: 0.75rem;
+    }
+    .detail{
+      .name{
+      font-size: 1rem;
+      }
+      .datatime{
+        font-size: 0.8rem;
+      }
+      
+      .description{
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
