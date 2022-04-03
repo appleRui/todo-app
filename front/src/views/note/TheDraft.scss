@@ -1,0 +1,34 @@
+.draft{
+  &__ttl-input{
+    font-weight: 700;
+  }
+  &__toolbar{
+    display: flex;
+    justify-content: right;
+    padding: 8px 15px;
+    background-color: rgb(245, 246, 246);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  .markdown-body {
+    margin-top: 0;
+  }
+  .v-btn:not(.v-btn--round).v-size--default {
+    height: auto;
+    padding: 16px;
+  }
+  .add-note-btn {
+    padding: 1rem;
+    background-color: #db4c3f;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  .v-note-wrapper {
+    height: calc(100vh - 175px);
+    z-index: 0;
+  }  
+  .v-text-field__details {
+    display: none;
+  }
+}
