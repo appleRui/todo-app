@@ -1,25 +1,5 @@
-<style lang="scss" scoped>
-.markdown-body {
-  margin-top: 0;
-}
-.v-btn:not(.v-btn--round).v-size--default {
-  height: auto;
-  padding: 16px;
-}
-.add-note-btn {
-  padding: 1rem;
-  background-color: #db4c3f;
-  border-radius: 50%;
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-}
-.v-note-panel {
-  min-height: 82vh;
-}
-.v-note-wrapper{
-  z-index: 0;
-}
+<style lang="scss">
+@import "./TheDraft";
 </style>
 
 <template>
@@ -27,45 +7,43 @@
     <the-sidebar :drawer.sync="drawer" />
     <the-header :drawer.sync="drawer" />
     <v-main top="0">
-      <v-text-field
-        class="mt-3 pr-2 pl-2"
-        v-model="note.title"
-        label="タイトル"
-        outlined
-        dense
-      ></v-text-field>
-      <mavon-editor
-        placeholder="Markdownで記述できます！"
-        v-model="note.content"
-        :toolbars="toolbars"
-        language="ja"
-        @save="save(note)"
-      />
+      <div class="draft__content">
+        <v-text-field
+          class="mt-3 px-2 draft__ttl-input"
+          v-model="note.title"
+          label="タイトル"
+          outlined
+          dense
+        ></v-text-field>
+        <mavon-editor
+          placeholder="Markdownで記述できます！"
+          v-model="note.content"
+          :toolbars="toolbars"
+          language="ja"
+        />
+        <div class="draft__toolbar">
+          <div class="rigth-content">
+            <v-btn
+              tile
+              color="primary"
+              :disabled="disabled"
+              @click="closeAndSave"
+            >
+              <span class="font-weight-black"
+                ><v-icon class="mr-2">mdi-content-save</v-icon
+                >保存して閉じる</span
+              >
+            </v-btn>
+          </div>
+        </div>
+      </div>
     </v-main>
-    <v-tooltip left>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          :disabled="disabled"
-          @click="closeAndSave"
-          class="add-note-btn"
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon>mdi-content-save</v-icon>
-        </v-btn>
-      </template>
-      <span>保存して閉じる</span>
-    </v-tooltip>
-    <theToaster />
   </div>
 </template>
 
 <script>
 import TheHeader from '@/components/TheHeader/TheHeader.vue'
 import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
-import TheToaster from '@/components/Modules/TheToaster.vue';
 import axios from '@/services/http'
 import store from '@/store/modules/toaster'
 import 'mavon-editor/dist/css/index.css'
@@ -115,7 +93,6 @@ export default({
   components: {
     TheHeader,
     TheSidebar,
-    TheToaster
   },
   methods: {
     async save(note){
@@ -124,7 +101,7 @@ export default({
           await axios.post('/api/v1/notes', note)
           store.dispatch('getToast', {msg: '保存しました', color: 'success', timeout: 3000})
         }else{
-          store.dispatch('getToast', {msg: 'タイトルを入力してください', color: 'error', timeout: 3000})
+          store.dispatch('getToast', {msg: 'タイトルを入力してください', color: 'error', timeout: 2000})
         }
       }catch(e){
         console.error(e)
