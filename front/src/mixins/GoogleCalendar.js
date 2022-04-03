@@ -36,7 +36,7 @@ export default {
               code: code,
               exp: exp
             })
-            await this.onGoogleCalendarDialog
+            await this.onGoogleCalendarDialog()
           })
       } else {
         toastStore.dispatch('getToast', {msg: '既に認証しています'})
