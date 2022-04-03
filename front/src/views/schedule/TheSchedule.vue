@@ -1,4 +1,5 @@
 <style lang="scss" scoped>
+@import "./TheSchedule";
 .schedule {
   height: 85vh;
 }
@@ -79,6 +80,7 @@
       :events="schedules"
       :month-format="() => ''"
       :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+      @click:event="showEvent"
     >
       <template v-slot:day-body="{ date, week }">
         <div
@@ -88,6 +90,43 @@
         ></div>
       </template>
     </v-calendar>
+
+    <v-menu
+      v-model="selectedOpen"
+      :close-on-content-click="false"
+      :activator="selectedElement"
+      offset-x
+      left
+    >
+      <v-card color="grey lighten-4" min-width="320px" flat>
+        <div class="card__innser">
+          <div class="card__header"></div>
+          <div class="card__content">
+            <div class="card__wrap">
+              <div class="icon-inner">
+                <v-icon dense color="gray darken-2"> mdi-clock </v-icon>
+              </div>
+              <div class="detail">
+                <h3 class="name">{{ selectedEvent.name }}</h3>
+                <p class="datatime">
+                  {{ selectedEvent.dateTime }}
+                </p>
+              </div>
+            </div>
+            <div v-if="selectedEvent.description" class="card__wrap">
+              <div class="icon-inner">
+                <v-icon dense color="gray darken-2"> mdi-message-text </v-icon>
+              </div>
+              <div class="detail">
+                <p class="description" v-html="selectedEvent.description">
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-card>
+    </v-menu>
+
     <Dialog />
   </div>
 </template>
@@ -111,6 +150,9 @@ export default {
       ready: false,
       type: {name: '週', value: 'week'},
       types: [{name: '月', value: 'month'}, {name: '週', value: 'week'}],
+      selectedEvent: {},
+      selectedElement: {},
+      selectedOpen: false,
     }
   },
   mounted() {
@@ -138,6 +180,28 @@ export default {
       },
       updateTime () {
         setInterval(() => this.cal.updateTimes(), 60 * 1000)
+      },
+      dayFormat(start, end){
+        const date = dayjs(start).format('MM月DD日')
+        const startAt = dayjs(start).format('HH:mm')
+        const endAt = dayjs(end).format('HH:mm')
+        return date + ' ' + startAt + '~' + endAt
+      },
+      showEvent({ nativeEvent, event }) {
+        console.log(event)
+        const open = () => {
+          this.selectedEvent = event
+          this.selectedElement = nativeEvent.target
+          this.selectedEvent.dateTime = this.dayFormat(event.start, event.end)
+          requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true))
+        }
+        if (this.selectedOpen) {
+          this.selectedOpen = false
+          requestAnimationFrame(() => requestAnimationFrame(() => open()))
+        } else {
+          open()
+        }
+        nativeEvent.stopPropagation()
       },
   },
   computed: {

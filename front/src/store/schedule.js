@@ -26,7 +26,7 @@ const mutations = {
       const start = get(event, 'start.dateTime', event.start.date)
       const end = get(event, 'end.dateTime', event.end.date)
       const timed = start.length !== 10
-
+      
       const data = {
         id: event.id,
         calendarId: params.calendarId,
