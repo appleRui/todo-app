@@ -36,8 +36,7 @@ export default ({
   async created() {
     try{
       this.$store.commit('spinner/loading')
-      const todos = await axios.get(`/api/v1/todos`)
-      this.$store.commit('todo/setTodos', todos.data.todos)
+      // this.$store.commit('todo/setTodos', todos.data.todos)
       const notes = await axios.get(`/api/v1/notes`)
       this.$store.dispatch('note/setNotes', notes.data.notes)
       const isGoogleLogged = await axios.get(`/api/v1/schedules/isauth`)

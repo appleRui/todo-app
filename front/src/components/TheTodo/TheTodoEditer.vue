@@ -33,6 +33,7 @@
   <div class="the-editer">
     <div class="the-editer__inner">
       <input
+        autofocus
         class="d-block my-1 name"
         type="text"
         placeholder="タスク名"
@@ -88,27 +89,56 @@ export default ({
           name: '',
           date: dayjs().format('YYYY-MM-DD'),
           content: '',
-        }
+        },
+        isEditTodo: false
       }
+  },
+  created() {
+    if(this.$store.state.todo.setOpenTodo) {
+      this.formContent = this.$store.state.todo.setOpenTodo
+      this.isEditTodo = true
+    }
   },
   methods: {
     async onClickSave(){
+      if(this.isEditTodo){
+        await this.update()
+      }else{
+        await this.save()
+      }
+    },
+    onClickCansel(){
+      this.$emit('onClickCansel')
+    },
+    resetOpenTodo(){
+      return this.$store.commit('todo/resetOpenTodo')
+    },
+    async save(){
       try{
         const { data } = await axios.post(`/api/v1/todos`, this.formContent)
-        this.$store.commit('todo/addTodo', data.new_todo)
+        this.$emit('pushTodo', data.new_todo)
         this.onClickCansel()
       }catch(e){
         console.error(e)
       }
     },
-    onClickCansel(){
-      this.$emit('onClickCansel')
+    async update(){
+      try{
+        await axios.patch(`/api/v1/todos/${this.formContent.id}`, this.formContent)
+        this.onClickCansel()
+
+      }catch(e){
+        console.error(e)
+      }
     }
   },
   computed: {
     disabled() {
       return !this.formContent.name
     }
+  },
+  beforeDestroy () {
+    this.resetOpenTodo()
   }
 })
 </script>

@@ -1,13 +1,9 @@
 const state = {
-  todos: [],
   remenberTodo: {},
-  setOpenTodo: {}
+  setOpenTodo: null
 }
 
 const getters = {
-  todos(state) {
-    return state.todos;
-  },
   remenberTodo(state) {
     return state.remenberTodo;
   },
@@ -17,17 +13,14 @@ const getters = {
 }
 
 const mutations = {
-  setTodos(state, paylaod) {
-    state.todos = paylaod
-  },
   setRemenberTodo(state, paylaod) {
     state.remenberTodo = paylaod
   },
   setOpenTodo(state, paylaod) {
     state.setOpenTodo = paylaod
   },
-  addTodo(state, paylaod) {
-    state.todos.push(paylaod)
+  resetOpenTodo(state) {
+    state.setOpenTodo = null
   }
 }
 const actions = {}
