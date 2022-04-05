@@ -53,7 +53,7 @@
     <v-list class="todos-lists">
       <v-list-item
         class="todos-lists__item"
-        v-for="todo in todos"
+        v-for="todo in notDoneTodos"
         :key="todo.id"
       >
         <v-list-item-action>
@@ -76,7 +76,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
-        <component :is="component" @onClickAddBtn="onClickAddBtn" @onClickCansel="onClickCansel"></component>
+        <component :is="defaultComponent" @onClickAddBtn="onClickAddBtn" @pushTodo="pushTodo($event)" @onClickCansel="onClickCansel"></component>
       </v-list-item>
     </v-list>
 
@@ -99,7 +99,7 @@
 <script>
 import Dialog from '@/components/Modules/TheBaseDialog.vue'
 import AddBtn from '@/components/TheTodo/AddBtn.vue'
-import TheEditer from '@/components/TheTodo/TheEditer.vue'
+import TheEditer from '@/components/TheTodo/TheTodoEditer.vue'
 import dialog from '@/store/modules/dialog'
 import axios from '@/services/http'
 import find from 'lodash/find'
@@ -116,28 +116,36 @@ export default {
       snackbar: false,
       timeout: 3000,
       dialog: false,
-      component: 'AddBtn'
+      todos:[],
+      selectedTodo: null,
+      defaultComponent: 'AddBtn'
     }
+  },
+  async created(){
+    const res = await axios.get(`/api/v1/todos`)
+    this.todos = res.data.todos
   },
   methods: {
     onClickAddBtn(){
-      this.component = 'TheEditer'
+      this.defaultComponent = 'TheEditer'
     },
     onClickCansel(){
-      this.component = 'AddBtn'
+      this.defaultComponent = 'AddBtn'
     },
     onClickTodoDialog(id){
-      const  todo = find(this.$store.getters['todo/todos'], {id: id})
+      const  todo = find(this.todos, {id: id})
       dialog.commit('open', 'TheTodo')
       this.$store.commit('todo/setOpenTodo', todo)
-      console.log(todo)
+    },
+    pushTodo(newTodo){
+      this.todos.push(newTodo)
     },
     async done(id){
       try{
-        const item = find(this.$store.getters['todo/todos'], {id: id})
-        await axios.patch(`/api/v1/todos/${item.id}`, {check: true})
+        const item = find(this.todos, {id: id})
+        await axios.patch(`/api/v1/todos/${id}`, {check: true})
         this.$store.commit('todo/setRemenberTodo', item)
-        this.text = `${item.name}が削除されました`
+        this.text = `タスクが削除されました`
         this.snackbar = true
       }catch(e){
         console.error(e)
@@ -146,8 +154,9 @@ export default {
     async reverse(){
       try{
         const  RemenberTodo = this.$store.getters['todo/remenberTodo']
+        console.log(RemenberTodo)
         await axios.patch(`/api/v1/todos/${RemenberTodo.id}`, {check: false})
-        const item = find(this.$store.getters['todo/todos'], {id: RemenberTodo.id})
+        const item = find(this.todos, {id: RemenberTodo.id})
         item.check = false
         this.snackbar = false
       }catch(e){
@@ -155,10 +164,10 @@ export default {
       }
     }
   },
-  computed:{
-    todos() {
-      return  this.$store.getters['todo/todos'].filter((item) => item.check === false)
-    },
+  computed: {
+    notDoneTodos(){
+      return this.todos.filter((item) => item.check === false)
+    }
   }
 }
 </script>

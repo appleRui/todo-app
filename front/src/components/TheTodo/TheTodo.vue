@@ -10,7 +10,7 @@
 
 <script>
 import DisplayTodo from './DisplayTodo.vue'
-import TheEditer from './TheEditer.vue'
+import TheEditer from './TheTodoEditer.vue'
 
 export default {
   components:{

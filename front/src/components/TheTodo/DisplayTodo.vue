@@ -1,4 +1,3 @@
-
 <style lang="scss" scoped>
 .the-todo {
   &__inner {
@@ -28,7 +27,7 @@
 <template>
   <div class="the-todo__inner">
     <div class="check-box">
-      <v-simple-checkbox :ripple="false"></v-simple-checkbox>
+      <v-simple-checkbox v-model="selectedTodo.check" :ripple="false" @click="done(selectedTodo.id)"></v-simple-checkbox>
     </div>
     <div class="detail">
       <div class="detail__overview" @click="chengeComponent">
@@ -50,6 +49,8 @@
 </template>
 
 <script>
+import axios from '@/services/http'
+
 export default {  
   data(){
     return{
@@ -62,7 +63,14 @@ export default {
   methods: {
     chengeComponent(){
       this.$emit('chengeComponent')
-    }
+    },
+    async done(id){
+      try{
+        await axios.patch(`/api/v1/todos/${id}`, {check: true})
+      }catch(e){
+        console.error(e)
+      }
+    },
   },
 }
 </script>
