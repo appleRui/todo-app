@@ -1,6 +1,11 @@
 <style lang="scss" scoped>
 .todos {
   margin-top: 2rem;
+  .todos-lists {
+    &__item {
+      border-bottom: 1px solid #f0f0f0;
+    }
+  }
 }
 .todo-inner__checkbox {
   width: 5%;
@@ -10,8 +15,9 @@
 <template>
   <div class="todos">
     <h1>インボックス</h1>
+
     <!-- simple-table -->
-    <v-simple-table>
+    <!-- <v-simple-table>
       <template v-slot:default>
         <thead>
           <tr>
@@ -41,7 +47,38 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-simple-table> -->
+
+    <!-- v-list -->
+    <v-list class="todos-lists">
+      <v-list-item
+        class="todos-lists__item"
+        v-for="todo in todos"
+        :key="todo.id"
+      >
+        <v-list-item-action>
+          <v-checkbox
+            v-model="todo.check"
+            @click="done(todo.id)"
+          ></v-checkbox>
+        </v-list-item-action>
+
+        <v-list-item-content
+          style="cursor: pointer"
+          @click="onClickTodoDialog(todo.id)"
+        >
+          <v-list-item-title>{{ todo.name }}</v-list-item-title>
+          <v-list-item-subtitle>{{ todo.content }}</v-list-item-subtitle>
+          <v-list-item-subtitle
+            ><v-icon class="mr-1" size="16">mdi-calendar-month</v-icon
+            >{{ todo.date }}</v-list-item-subtitle
+          >
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <component :is="component" @onClickAddBtn="onClickAddBtn" @onClickCansel="onClickCansel"></component>
+      </v-list-item>
+    </v-list>
 
     <!-- snackbar -->
     <div class="text-center">
@@ -61,13 +98,17 @@
 
 <script>
 import Dialog from '@/components/Modules/TheBaseDialog.vue'
+import AddBtn from '@/components/TheTodo/AddBtn.vue'
+import TheEditer from '@/components/TheTodo/TheEditer.vue'
+import dialog from '@/store/modules/dialog'
 import axios from '@/services/http'
-import store from '@/store/modules/dialog'
 import find from 'lodash/find'
 
 export default {
   components: {
-    Dialog
+    Dialog,
+    AddBtn,
+    TheEditer
   },
   data() {
     return {
@@ -75,15 +116,25 @@ export default {
       snackbar: false,
       timeout: 3000,
       dialog: false,
+      component: 'AddBtn'
     }
   },
   methods: {
-    onClickDialog(componentName){
-      store.commit('open', componentName)
+    onClickAddBtn(){
+      this.component = 'TheEditer'
+    },
+    onClickCansel(){
+      this.component = 'AddBtn'
+    },
+    onClickTodoDialog(id){
+      const  todo = find(this.$store.getters['todo/todos'], {id: id})
+      dialog.commit('open', 'TheTodo')
+      this.$store.commit('todo/setOpenTodo', todo)
+      console.log(todo)
     },
     async done(id){
       try{
-        var item = find(this.$store.getters['todo/todos'], {id: id})
+        const item = find(this.$store.getters['todo/todos'], {id: id})
         await axios.patch(`/api/v1/todos/${item.id}`, {check: true})
         this.$store.commit('todo/setRemenberTodo', item)
         this.text = `${item.name}が削除されました`
@@ -94,9 +145,9 @@ export default {
     },
     async reverse(){
       try{
-        var RemenberTodo = this.$store.getters['todo/remenberTodo']
+        const  RemenberTodo = this.$store.getters['todo/remenberTodo']
         await axios.patch(`/api/v1/todos/${RemenberTodo.id}`, {check: false})
-        var item = find(this.$store.getters['todo/todos'], {id: RemenberTodo.id})
+        const item = find(this.$store.getters['todo/todos'], {id: RemenberTodo.id})
         item.check = false
         this.snackbar = false
       }catch(e){

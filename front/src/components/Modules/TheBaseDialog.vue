@@ -14,6 +14,7 @@
 import store from '@/store/modules/dialog'
 import TheNote from '@/components/TheNote/TheNote.vue'
 import AddForm from '@/components/TheTodo/AddForm.vue'
+import TheTodo from '@/components/TheTodo/TheTodo.vue'
 import ScheduleList from '@/components/TheSchedule/ScheduleList.vue'
 
 export default {
@@ -23,6 +24,7 @@ export default {
   components:{
     TheNote,
     AddForm,
+    TheTodo,
     ScheduleList
   },
   methods: {
