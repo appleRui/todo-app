@@ -24,20 +24,24 @@ const routes = [{
     name: 'TheRoot',
     component: Root,
     children: [{
-        path: '/',
-        redirect: 'todos'
-      },
-      {
-        path: 'todos',
-        component: () => import('@/views/todo/TodoList.vue')
-      },
-      {
-        path: 'notes',
-        component: () => import('@/views/note/NoteList.vue')
-      },
-      {
-        path: 'draft',
-        component: () => import('@/views/note/TheDraft.vue')
+      path: '/',
+      redirect: 'todos'
+    },
+    {
+      path: 'note/:id',
+      component: () => import('@/views/note/TheNote.vue')
+    },
+    {
+      path: 'todos',
+      component: () => import('@/views/todo/TodoList.vue')
+    },
+    {
+      path: 'notes',
+      component: () => import('@/views/note/NoteList.vue')
+    },
+    {
+      path: 'draft',
+      component: () => import('@/views/note/TheDraft.vue')
       },
       {
         path: 'schedule',
