@@ -42,9 +42,9 @@ export default({
   data(){
     return {
       items: [
-          { title: 'TODOリスト', icon: 'mdi-format-list-checks', route: 'todos' },
-          { title: 'ノート', icon: 'mdi-notebook', route: 'notes' },
-          { title: 'スケジュール', icon: 'mdi-calendar', route: 'schedule'  },
+          { title: 'TODOリスト', icon: 'mdi-format-list-checks', route: '/todos' },
+          { title: 'ノート', icon: 'mdi-notebook', route: '/notes' },
+          { title: 'スケジュール', icon: 'mdi-calendar', route: '/schedule'  },
         ],
     }
   },

@@ -1,0 +1,31 @@
+pre {
+  background-color: rgb(247, 246, 243);
+}
+
+.note {
+  min-height: 810px;
+
+  &__detail {
+    padding: 4% 13%;
+
+    .ttl-inner {
+
+      &__ttl {
+        font-size: 40px;
+      }
+    }
+
+    .v-note-wrapper::v-deep .v-note-panel .v-note-show .v-show-content {
+      padding: 0;
+    }
+
+    .markdown-body::v-deep code {
+      background-color: rgba(0, 0, 0, 0);
+    }
+
+    .markdown-body::v-deep .hljs {
+      background: #f6f8fa;
+    }
+  }
+
+}
