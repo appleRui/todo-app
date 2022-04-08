@@ -5,6 +5,7 @@ import {
 } from './authGuard'
 import Root from '@/views/TheRoot.vue'
 import Login from '@/views/auth/TheLogin'
+import NotFound from '@/views/notfound/NotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,11 @@ const routes = [{
       },
     ]
   },
+  {
+    path: '*',
+    name: 'notfound',
+    component: NotFound
+  }
 ]
 
 const router = new VueRouter({

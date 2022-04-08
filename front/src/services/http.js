@@ -58,7 +58,13 @@ class Http {
         return res;
       },
       (error) => {
-        console.error(error)
+        // console.error(error.response)
+        console.error(error.response.status + ":" + error.response.statusText)
+        if (error.response.status === 404) {
+          router.push({
+            name: 'notfound'
+          })
+        }
       }
     )
   }
