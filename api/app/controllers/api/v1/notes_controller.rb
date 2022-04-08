@@ -17,6 +17,16 @@ class Api::V1::NotesController < ApplicationController
     end
   end
 
+  def update
+    note = Note.find(params[:id])
+    if note.update(note_params)
+      render json: {
+        result: @result,
+        logout: @logout
+      }
+    end
+  end
+
   def show
     note = Note.find(params[:id]).as_json(except: [:user_id]) if @result
     res = {result: @result, logout: @logout, note: note}
