@@ -9,7 +9,7 @@ Rails.application.routes.draw do
         get :current_user, action: :show, on: :collection
       end
       resources :todos, only: [:index, :create, :update]
-      resources :notes, only: [:index, :create, :destroy, :show]
+      resources :notes, only: [:index, :create, :update, :destroy, :show]
       resources :schedules, only: [:index]
       get 'schedules/isauth', action: :isauth, controller: 'schedules'
       get 'schedules/events', action: :events, controller: 'schedules'

@@ -30,7 +30,6 @@
           <tr>
             <th class="text-left">タイトル</th>
             <th class="text-left">作成日</th>
-            <th class="text-left">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -39,11 +38,6 @@
               {{ note.title }}
             </td>
             <td>{{ dateFormat(note.created_at) }}</td>
-            <td>
-              <button @click="noteDestroy(note.id)">
-                <v-icon>mdi-delete</v-icon>
-              </button>
-            </td>
           </tr>
         </tbody>
       </template>
@@ -76,6 +70,9 @@ export default({
       const res = await axios.get(`/api/v1/notes/${noteId}`)
       this.$store.dispatch('note/setOpenNote', res.data.note)
       dialogStore.commit('open', 'TheNote')
+    },
+    noteEdit(noteId){
+      this.$router.push(`/note/edit/${noteId}`)
     },
     async noteDestroy(noteId){
       try{

@@ -16,7 +16,7 @@
           dense
         ></v-text-field>
         <mavon-editor
-          placeholder="Markdownで記述できます！"
+          placeholder="Markdownで記述できます!"
           v-model="note.content"
           :toolbars="toolbars"
           language="ja"
@@ -87,18 +87,30 @@ export default({
         subfield: true,
         preview: true,
       },
-      isClickedSavedBtn: false
+      isClickedSavedBtn: false,
+      isEditer: false,
+      isChangeTime: null,
     }
   },
   components: {
     TheHeader,
     TheSidebar,
   },
+  async created() {
+    const path = this.$route.path
+    const regex = /note\/edit\/\d[1-9]{1,}/
+    if(regex.test(path)) {
+      this.isEditer = true
+      const id = this.$route.params.id
+      const { data } = await axios.get(`/api/v1/notes/${id}`)
+      this.note = data.note
+    }
+  },
   methods: {
-    async save(note){
+    async save(){
       try{
         if(this.note.title){
-          await axios.post('/api/v1/notes', note)
+          await axios.post('/api/v1/notes', this.note)
           store.dispatch('getToast', {msg: '保存しました', color: 'success', timeout: 3000})
         }else{
           store.dispatch('getToast', {msg: 'タイトルを入力してください', color: 'error', timeout: 2000})
@@ -108,9 +120,25 @@ export default({
       }
       this.isClickedSavedBtn = true
     },
+    async update(){
+      try{
+          await axios.patch(`/api/v1/notes/${this.$route.params.id}`, this.note)
+          store.dispatch('getToast', {msg: '更新しました', color: 'success', timeout: 3000})
+      }catch(e){
+        console.error(e)
+      }
+      this.isClickedSavedBtn = true
+    },
     async closeAndSave(){
-      await this.save(this.note)
+      if(!this.isEditer){
+        await this.save()
+      }else{
+        await this.update()
+      }
       this.$router.push('/notes')
+    },
+    localSave(newVal){
+      console.log(newVal)
     }
   },
   computed: {
@@ -121,6 +149,20 @@ export default({
       return !this.note.title
     }
   },
+  // watch: {
+  //   'note.content': function(){
+  //     const time = new Date().getTime()
+  //     this.isChangeTime = new Date().getTime()
+  //     setTimeout(()=>{
+  //       if(this.isChangeTime === time){
+  //         localStorage.setItem('bgsb', JSON.stringify({
+  //           saved_at: time,
+  //           content: this.note.content
+  //         }));
+  //       }
+  //     }, 2500)
+  //   }
+  // },
   async beforeRouteLeave(to, from, next) {
     if(this.isClickedSavedBtn) next()
     if(!this.isClickedSavedBtn && !this.IsEnteredTitle){
