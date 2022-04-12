@@ -2,6 +2,8 @@ import axios from 'axios'
 import get from 'lodash/get'
 import auth from '@/services/auth'
 import router from '@/router/index'
+import dialog from '@/store/modules/dialog'
+
 const storage = window.localStorage
 
 class Http {
@@ -60,6 +62,7 @@ class Http {
       (error) => {
         // console.error(error.response)
         console.error(error.response.status + ":" + error.response.statusText)
+        dialog.commit('close')
         if (error.response.status === 404) {
           router.push({
             name: 'notfound'

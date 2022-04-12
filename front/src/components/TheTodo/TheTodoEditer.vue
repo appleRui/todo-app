@@ -81,6 +81,7 @@
 <script>
 import dayjs from 'dayjs'
 import axios from '@/services/http'
+import dialog from '@/store/modules/dialog'
 
 export default ({
   data(){
@@ -93,9 +94,17 @@ export default ({
         isEditTodo: false
       }
   },
-  created() {
-    if(this.$store.state.todo.setOpenTodo) {
-      this.formContent = this.$store.state.todo.setOpenTodo
+  props: {
+    setTodo: {
+      require: true,
+      type: Object,
+    }
+  },
+  async created() {
+    if(this.$store.state.todo.setOpenTodo !== 0) {
+      const id = this.$store.state.todo.setOpenTodo
+      const { data } = await axios.get(`api/v1/todos/${id}`)
+      this.formContent = data.todo
       this.isEditTodo = true
     }
   },
@@ -125,7 +134,9 @@ export default ({
     async update(){
       try{
         await axios.patch(`/api/v1/todos/${this.formContent.id}`, this.formContent)
-        this.onClickCansel()
+        dialog.commit('close')
+        location.reload()
+        // this.$router.push('/todos',  () => {})
 
       }catch(e){
         console.error(e)

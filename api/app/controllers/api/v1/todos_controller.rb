@@ -15,6 +15,12 @@ class Api::V1::TodosController < ApplicationController
     render json: res
   end
 
+  def show
+    todo = Todo::find(params[:id]) if @result
+    res = {result: @result, logout: @logout, todo: todo}
+    render json: res
+  end
+
   def update
     todo = Todo.find(params[:id])
     @result = todo.update(todo_params)

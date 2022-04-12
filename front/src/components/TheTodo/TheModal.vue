@@ -1,15 +1,18 @@
 <style lang="scss">
-
 </style>
 
 <template>
   <v-card class="the-todo py-6 px-4" width="650">
-    <component :is="displayComponent" @chengeComponent="chengeComponent" @onClickCansel="onClickCansel"></component>
+    <component
+      :is="displayComponent"
+      @chengeComponent="chengeComponent"
+      @onClickCansel="onClickCansel"
+    ></component>
   </v-card>
 </template>
 
 <script>
-import DisplayTodo from './DisplayTodo.vue'
+import DisplayTodo from './DitailTodo.vue'
 import TheEditer from './TheTodoEditer.vue'
 
 export default {
@@ -19,7 +22,7 @@ export default {
   },
   data(){
     return{
-      displayComponent: 'DisplayTodo'
+      displayComponent: 'DisplayTodo',
     }
   },
   methods: {
