@@ -27,21 +27,25 @@
 <template>
   <div class="the-todo__inner">
     <div class="check-box">
-      <v-simple-checkbox v-model="selectedTodo.check" :ripple="false" @click="done(selectedTodo.id)"></v-simple-checkbox>
+      <v-simple-checkbox
+        v-model="todo.check"
+        :ripple="false"
+        @click="done(todo.id)"
+      ></v-simple-checkbox>
     </div>
     <div class="detail">
       <div class="detail__overview" @click="chengeComponent">
         <div class="name">
-          {{ selectedTodo.name }}
+          {{ todo.name }}
         </div>
         <div class="discription">
-          {{ selectedTodo.content }}
+          {{ todo.content }}
         </div>
       </div>
       <div class="date-time">
         <v-chip class="mt-2" label outlined>
           <v-icon size="16">mdi-calendar-month</v-icon>
-          {{ selectedTodo.date }}
+          {{ todo.date }}
         </v-chip>
       </div>
     </div>
@@ -53,12 +57,14 @@ import axios from '@/services/http'
 
 export default {  
   data(){
-    return{
-        selectedTodo: {}
-      }
+    return {
+      todo: {}
+    }
   },
-  created() {
-    this.selectedTodo = this.$store.state.todo.setOpenTodo
+  async created() {
+    const id = this.$store.state.todo.setOpenTodo
+    const { data } = await axios.get(`api/v1/todos/${id}`)
+    this.todo = data.todo
   },
   methods: {
     chengeComponent(){

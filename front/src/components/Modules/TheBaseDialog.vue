@@ -6,7 +6,7 @@
 
 <template>
   <v-dialog width="auto" :persistent=persistent v-model="setDialog">
-    <component :is="setComponent"></component>
+    <componen :is="setComponent" />
   </v-dialog>
 </template>
 
@@ -14,7 +14,7 @@
 import store from '@/store/modules/dialog'
 import TheNote from '@/components/TheNote/TheDetail.vue'
 import AddForm from '@/components/TheTodo/AddForm.vue'
-import TheTodo from '@/components/TheTodo/TheTodo.vue'
+import TheTodoModal from '@/components/TheTodo/TheModal.vue'
 import ScheduleList from '@/components/TheSchedule/ScheduleList.vue'
 
 export default {
@@ -24,7 +24,7 @@ export default {
   components:{
     TheNote,
     AddForm,
-    TheTodo,
+    TheTodoModal,
     ScheduleList
   },
   methods: {

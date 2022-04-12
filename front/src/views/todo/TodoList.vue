@@ -57,10 +57,7 @@
         :key="todo.id"
       >
         <v-list-item-action>
-          <v-checkbox
-            v-model="todo.check"
-            @click="done(todo.id)"
-          ></v-checkbox>
+          <v-checkbox v-model="todo.check" @click="done(todo.id)"></v-checkbox>
         </v-list-item-action>
 
         <v-list-item-content
@@ -76,7 +73,12 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
-        <component :is="defaultComponent" @onClickAddBtn="onClickAddBtn" @pushTodo="pushTodo($event)" @onClickCansel="onClickCansel"></component>
+        <component
+          :is="defaultComponent"
+          @onClickAddBtn="onClickAddBtn"
+          @pushTodo="pushTodo($event)"
+          @onClickCansel="onClickCansel"
+        ></component>
       </v-list-item>
     </v-list>
 
@@ -133,9 +135,8 @@ export default {
       this.defaultComponent = 'AddBtn'
     },
     onClickTodoDialog(id){
-      const  todo = find(this.todos, {id: id})
-      dialog.commit('open', 'TheTodo')
-      this.$store.commit('todo/setOpenTodo', todo)
+      dialog.commit('open', 'TheTodoModal')
+      this.$store.commit('todo/setOpenTodo', id)
     },
     pushTodo(newTodo){
       this.todos.push(newTodo)

@@ -1,6 +1,6 @@
 const state = {
   remenberTodo: {},
-  setOpenTodo: null
+  setOpenTodo: 0
 }
 
 const getters = {
@@ -20,7 +20,7 @@ const mutations = {
     state.setOpenTodo = paylaod
   },
   resetOpenTodo(state) {
-    state.setOpenTodo = null
+    state.setOpenTodo = 0
   }
 }
 const actions = {}
