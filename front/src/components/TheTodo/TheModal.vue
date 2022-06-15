@@ -13,7 +13,7 @@
 
 <script>
 import DisplayTodo from './DitailTodo.vue'
-import TheEditer from './TheTodoEditer.vue'
+import TheEditer from './TheEditer.vue'
 
 export default {
   components:{

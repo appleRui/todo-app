@@ -42,6 +42,10 @@ const routes = [{
         component: () => import('@/views/todo/TodoList.vue')
       },
       {
+        path: 'todos/new',
+        component: () => import('@/views/todo/TheForm.vue')
+      },
+      {
         path: 'notes',
         component: () => import('@/views/note/NoteList.vue')
       },
