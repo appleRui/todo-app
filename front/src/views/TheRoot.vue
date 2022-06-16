@@ -24,7 +24,7 @@ import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
 import TheToaster from '@/components/Modules/TheToaster.vue'
 import GoogleCalendar from '@/mixins/GoogleCalendar'
 import axios from '@/services/http'
-``
+
 export default ({
   name: 'TheRoot',
   components: {

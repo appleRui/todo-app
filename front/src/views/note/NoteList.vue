@@ -71,9 +71,6 @@ export default({
       this.$store.dispatch('note/setOpenNote', res.data.note)
       dialogStore.commit('open', 'TheNote')
     },
-    noteEdit(noteId){
-      this.$router.push(`/note/edit/${noteId}`)
-    },
     async noteDestroy(noteId){
       try{
         const res = confirm('本当に削除しますか？')

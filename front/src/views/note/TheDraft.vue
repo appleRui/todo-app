@@ -60,18 +60,18 @@ export default({
         bold: true,
         italic: true,
         header: true,
-        underline: true,
+        underline: false,
         strikethrough: true,
-        mark: true,
-        superscript: true,
-        subscript: true,
+        mark: false,
+        superscript: false,
+        subscript: false,
         quote: true,
         ol: true, 
         ul: true, 
         link: true,
-        imagelink: true,
+        imagelink: false,
         code: true,
-        table: true,
+        table: false,
         fullscreen: true,
         readmodel: true,
         htmlcode: false,
@@ -81,9 +81,9 @@ export default({
         trash: false,
         save: false,
         navigation: true,
-        alignleft: true,
-        aligncenter: true,
-        alignright: true,
+        alignleft: false,
+        aligncenter: false,
+        alignright: false,
         subfield: true,
         preview: true,
       },
@@ -98,7 +98,7 @@ export default({
   },
   async created() {
     const path = this.$route.path
-    const regex = /note\/edit\/\d[1-9]{1,}/
+    const regex = /note\/edit\/[1-9]/
     if(regex.test(path)) {
       this.isEditer = true
       const id = this.$route.params.id
