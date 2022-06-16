@@ -46,6 +46,10 @@ const routes = [{
         component: () => import('@/views/todo/TheForm.vue')
       },
       {
+        path: 'todos/edit/:id',
+        component: () => import('@/views/todo/TheForm.vue')
+      },
+      {
         path: 'notes',
         component: () => import('@/views/note/NoteList.vue')
       },

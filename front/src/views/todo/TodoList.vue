@@ -43,10 +43,7 @@
           <v-checkbox v-model="todo.check" @click="done(todo.id)"></v-checkbox>
         </v-list-item-action>
 
-        <v-list-item-content
-          style="cursor: pointer"
-          @click="onClickTodoDialog(todo.id)"
-        >
+        <v-list-item-content style="cursor: pointer">
           <v-list-item-title>{{ todo.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ todo.content }}</v-list-item-subtitle>
           <v-list-item-subtitle
@@ -59,6 +56,35 @@
             >優先順位{{ todo.priority }}</v-list-item-subtitle
           >
         </v-list-item-content>
+        <v-list-item-action style="flex-direction: row; align-self: center">
+          <v-btn
+            class="mr-1"
+            elevation="0"
+            @click="onClickEdit(todo.id)"
+            outlined
+            small
+            tile
+            >編集</v-btn
+          >
+          <v-btn
+            class="mr-1"
+            elevation="0"
+            @click="onClickCopy(todo.id)"
+            outlined
+            small
+            tile
+            >コピー</v-btn
+          >
+          <v-btn
+            class="mr-1"
+            elevation="0"
+            @click="onClickDelete(todo.id)"
+            outlined
+            small
+            tile
+            >削除</v-btn
+          >
+        </v-list-item-action>
       </v-list-item>
     </v-list>
 
@@ -82,7 +108,6 @@
 import Dialog from '@/components/Modules/TheBaseDialog.vue'
 import AddBtn from '@/components/TheTodo/AddBtn.vue'
 import TheEditer from '@/components/TheTodo/TheEditer.vue'
-import dialog from '@/store/modules/dialog'
 import axios from '@/services/http'
 import find from 'lodash/find'
 
@@ -104,29 +129,42 @@ export default {
     }
   },
   async created(){
-    const { data } = await axios.get(`/api/v1/todos`)
-    this.todos = data.todos
+    this.getTodos()
   },
   methods: {
     onClickAddBtn(){
       this.$router.push('/todos/new')
     },
-    onClickCansel(){
-      this.defaultComponent = 'AddBtn'
+    onClickEdit(id) {
+      this.$router.push('/todos/edit/' + id)
     },
-    onClickTodoDialog(id){
-      dialog.commit('open', 'TheTodoModal')
-      this.$store.commit('todo/setOpenTodo', id)
+    onClickCopy(id) {
+      this.$router.push({
+        path: '/todos/new',
+        query: {
+          original_id: id
+        }
+      })
     },
-    pushTodo(newTodo){
-      this.todos.push(newTodo)
+    onClickDelete(id) {
+      const res = confirm("タスクを削除しますか？")
+      if (res) {
+        axios.delete(`api/v1/todos/${id}`)
+          .then(() => {
+          this.getTodos()
+        })
+      }
+    },
+    async getTodos() {
+      const { data } = await axios.get(`/api/v1/todos`)
+      this.todos = data.todos
     },
     async done(id){
       try{
         const item = find(this.todos, {id: id})
         await axios.patch(`/api/v1/todos/${id}`, {check: true})
         this.$store.commit('todo/setRemenberTodo', item)
-        this.text = `タスクが削除されました`
+        this.text = `タスクが完了しました`
         this.snackbar = true
       }catch(e){
         console.error(e)
@@ -135,7 +173,6 @@ export default {
     async reverse(){
       try{
         const  RemenberTodo = this.$store.getters['todo/remenberTodo']
-        console.log(RemenberTodo)
         await axios.patch(`/api/v1/todos/${RemenberTodo.id}`, {check: false})
         const item = find(this.todos, {id: RemenberTodo.id})
         item.check = false

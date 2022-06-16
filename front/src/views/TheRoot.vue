@@ -24,7 +24,7 @@ import TheSidebar from '@/components/TheSidebar/TheSidebar.vue'
 import TheToaster from '@/components/Modules/TheToaster.vue'
 import GoogleCalendar from '@/mixins/GoogleCalendar'
 import axios from '@/services/http'
-
+``
 export default ({
   name: 'TheRoot',
   components: {
@@ -36,7 +36,6 @@ export default ({
   async created() {
     try{
       this.$store.commit('spinner/loading')
-      // this.$store.commit('todo/setTodos', todos.data.todos)
       const notes = await axios.get(`/api/v1/notes`)
       this.$store.dispatch('note/setNotes', notes.data.notes)
       const isGoogleLogged = await axios.get(`/api/v1/schedules/isauth`)

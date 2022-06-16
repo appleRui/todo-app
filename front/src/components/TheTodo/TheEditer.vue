@@ -115,10 +115,18 @@ export default ({
       }
   },
   async created() {
-    if(this.$store.state.todo.setOpenTodo !== 0) {
-      const id = this.$store.state.todo.setOpenTodo
-      await axios.get(`api/v1/todos/${id}`)
+    const path = this.$route.path
+    const query = this.$route.query
+    const regex = /todos\/edit\/[1-9]/
+    if(regex.test(path)) {
       this.isEditTodo = true
+      const id = this.$route.params.id
+      const { data } = await axios.get(`/api/v1/todos/${id}`)
+      this.formContent = data.todo
+    }else if (query.original_id) {
+      const id = query.original_id
+      const { data } = await axios.get(`/api/v1/todos/${id}`)
+      this.formContent = data.todo
     }
   },
   methods: {
@@ -138,6 +146,14 @@ export default ({
     async save(){
       try{
         await axios.post(`/api/v1/todos`, this.formContent)
+        this.onClickCansel()
+      }catch(e){
+        console.error(e)
+      }
+    },
+    async update() {
+      try{
+        await axios.patch(`/api/v1/todos/${this.$route.params.id}`, this.formContent)
         this.onClickCansel()
       }catch(e){
         console.error(e)

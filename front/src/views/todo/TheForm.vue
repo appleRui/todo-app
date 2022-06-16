@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.todo-form{
+.todo-form {
   margin-top: 2rem;
 }
 </style>
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-// import axios from '@/services/http'
 import TheEditer from '@/components/TheTodo/TheEditer.vue'
 
 export default {
@@ -24,12 +23,12 @@ export default {
       title: "新規登録"
     }
   },
-  async created(){
-  },
-  methods: {
-  },
-  computed: {
-    
+  async created() {
+    const path = this.$route.path
+    const regex = /todos\/edit\/[1-9]/
+    if(regex.test(path)) {
+      this.title = "TODO編集"
+    }
   }
 }
 </script>
