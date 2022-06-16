@@ -19,7 +19,7 @@
         </template>
 
         <v-list min-width="167">
-          <v-list-item @click="noteEdit">
+          <v-list-item @click="onClickEdit">
             <v-icon class="mr-2">mdi-note-edit-outline</v-icon>
             <v-list-item-title>編集</v-list-item-title>
           </v-list-item>
@@ -50,7 +50,7 @@ export default {
       dialog.commit('close')
       this.$router.push(`/note/${this.id}`)
     },
-    noteEdit(){
+    onClickEdit(){
       dialog.commit('close')
       this.$router.push(`/note/edit/${this.id}`)
     },
