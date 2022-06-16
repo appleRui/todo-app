@@ -8,10 +8,10 @@
 </style>
 
 <template>
-  <div class="add-btn" @click="onClickAddBtn">
-    <v-icon size="19" color="primary">mdi-pencil-plus</v-icon
+  <v-btn class="add-btn" color="primary" @click="onClickAddBtn">
+    <v-icon size="19" color="white">mdi-pencil-plus</v-icon
     ><span class="txt">タスクを追加</span>
-  </div>
+  </v-btn>
 </template>
 
 <script>

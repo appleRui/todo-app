@@ -1,6 +1,10 @@
 <style lang="scss" scoped>
 .todos {
   margin-top: 2rem;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
   .todos-lists {
     &__item {
       border-bottom: 1px solid #f0f0f0;
@@ -10,44 +14,23 @@
 .todo-inner__checkbox {
   width: 5%;
 }
+.priority-1 {
+  color: #ff4848;
+}
+.priority-2 {
+  color: #4873ff;
+}
+.priority-3 {
+  color: #ffa530;
+}
 </style>
 
 <template>
   <div class="todos">
-    <h1>インボックス</h1>
-
-    <!-- simple-table -->
-    <!-- <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left"></th>
-            <th class="text-left">タスク名</th>
-            <th class="text-left">日付</th>
-            <th class="text-left">説明</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in todos" :key="item.id">
-            <td class="todo-inner__checkbox">
-              <v-simple-checkbox
-                v-model="item.check"
-                :ripple="false"
-                @click="done(item.id)"
-              ></v-simple-checkbox>
-            </td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.date }}</td>
-            <td>{{ item.content }}</td>
-          </tr>
-          <tr style="cursor: pointer" @click="onClickDialog('AddForm')">
-            <td colspan="4">
-              <v-icon>mdi-pencil-plus</v-icon><span>タスク追加</span>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table> -->
+    <div class="todos__header">
+      <h1 class="ttl">インボックス</h1>
+      <AddBtn @onClickAddBtn="onClickAddBtn" />
+    </div>
 
     <!-- v-list -->
     <v-list class="todos-lists">
@@ -60,25 +43,48 @@
           <v-checkbox v-model="todo.check" @click="done(todo.id)"></v-checkbox>
         </v-list-item-action>
 
-        <v-list-item-content
-          style="cursor: pointer"
-          @click="onClickTodoDialog(todo.id)"
-        >
+        <v-list-item-content style="cursor: pointer">
           <v-list-item-title>{{ todo.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ todo.content }}</v-list-item-subtitle>
           <v-list-item-subtitle
             ><v-icon class="mr-1" size="16">mdi-calendar-month</v-icon
             >{{ todo.date }}</v-list-item-subtitle
           >
+          <v-list-item-subtitle>
+            <v-icon :class="priorityColor(todo.priority)" size="16"
+              >mdi-flag</v-icon
+            >優先順位{{ todo.priority }}</v-list-item-subtitle
+          >
         </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <component
-          :is="defaultComponent"
-          @onClickAddBtn="onClickAddBtn"
-          @pushTodo="pushTodo($event)"
-          @onClickCansel="onClickCansel"
-        ></component>
+        <v-list-item-action style="flex-direction: row; align-self: center">
+          <v-btn
+            class="mr-1"
+            elevation="0"
+            @click="onClickEdit(todo.id)"
+            outlined
+            small
+            tile
+            >編集</v-btn
+          >
+          <v-btn
+            class="mr-1"
+            elevation="0"
+            @click="onClickCopy(todo.id)"
+            outlined
+            small
+            tile
+            >コピー</v-btn
+          >
+          <v-btn
+            class="mr-1"
+            elevation="0"
+            @click="onClickDelete(todo.id)"
+            outlined
+            small
+            tile
+            >削除</v-btn
+          >
+        </v-list-item-action>
       </v-list-item>
     </v-list>
 
@@ -101,8 +107,7 @@
 <script>
 import Dialog from '@/components/Modules/TheBaseDialog.vue'
 import AddBtn from '@/components/TheTodo/AddBtn.vue'
-import TheEditer from '@/components/TheTodo/TheTodoEditer.vue'
-import dialog from '@/store/modules/dialog'
+import TheEditer from '@/components/TheTodo/TheEditer.vue'
 import axios from '@/services/http'
 import find from 'lodash/find'
 
@@ -124,29 +129,42 @@ export default {
     }
   },
   async created(){
-    const res = await axios.get(`/api/v1/todos`)
-    this.todos = res.data.todos
+    this.getTodos()
   },
   methods: {
     onClickAddBtn(){
-      this.defaultComponent = 'TheEditer'
+      this.$router.push('/todos/new')
     },
-    onClickCansel(){
-      this.defaultComponent = 'AddBtn'
+    onClickEdit(id) {
+      this.$router.push('/todos/edit/' + id)
     },
-    onClickTodoDialog(id){
-      dialog.commit('open', 'TheTodoModal')
-      this.$store.commit('todo/setOpenTodo', id)
+    onClickCopy(id) {
+      this.$router.push({
+        path: '/todos/new',
+        query: {
+          original_id: id
+        }
+      })
     },
-    pushTodo(newTodo){
-      this.todos.push(newTodo)
+    onClickDelete(id) {
+      const res = confirm("タスクを削除しますか？")
+      if (res) {
+        axios.delete(`api/v1/todos/${id}`)
+          .then(() => {
+          this.getTodos()
+        })
+      }
+    },
+    async getTodos() {
+      const { data } = await axios.get(`/api/v1/todos`)
+      this.todos = data.todos
     },
     async done(id){
       try{
         const item = find(this.todos, {id: id})
         await axios.patch(`/api/v1/todos/${id}`, {check: true})
         this.$store.commit('todo/setRemenberTodo', item)
-        this.text = `タスクが削除されました`
+        this.text = `タスクが完了しました`
         this.snackbar = true
       }catch(e){
         console.error(e)
@@ -155,13 +173,27 @@ export default {
     async reverse(){
       try{
         const  RemenberTodo = this.$store.getters['todo/remenberTodo']
-        console.log(RemenberTodo)
         await axios.patch(`/api/v1/todos/${RemenberTodo.id}`, {check: false})
         const item = find(this.todos, {id: RemenberTodo.id})
         item.check = false
         this.snackbar = false
       }catch(e){
         console.error(e)
+      }
+    },
+    priorityColor(priority){
+      switch (priority) {
+        case 1:
+          return 'priority-1'
+          break;
+        case 2:
+          return 'priority-2'
+          break;
+        case 3:
+          return 'priority-3'
+          break;
+        default:
+          return 'priority-4'
       }
     }
   },

@@ -48,7 +48,7 @@
 
       <v-menu :close-on-content-click="true" offset-y min-width="auto">
         <template v-slot:activator="{ on }">
-          <v-chip v-on="on" class="mt-2" label outlined>
+          <v-chip v-on="on" class="mt-2 mr-2" label outlined>
             <v-icon size="16">mdi-calendar-month</v-icon>
             {{ formContent.date }}
           </v-chip>
@@ -59,6 +59,25 @@
           :day-format="(date) => new Date(date).getDate()"
           no-title
         ></v-date-picker>
+      </v-menu>
+
+      <v-menu :close-on-content-click="true" offset-y min-width="auto">
+        <template v-slot:activator="{ on }">
+          <v-chip v-on="on" class="mt-2" label outlined>
+            <v-icon size="16">mdi-flag</v-icon>
+            {{ "優先順位" + formContent.priority }}
+          </v-chip>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="priority in priorities"
+            :key="priority"
+            @click="onChabgePriority(priority)"
+            link
+          >
+            <v-list-item-title>{{ "優先順位" + priority }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
       </v-menu>
     </div>
     <div class="the-editer__actions">
@@ -81,31 +100,33 @@
 <script>
 import dayjs from 'dayjs'
 import axios from '@/services/http'
-import dialog from '@/store/modules/dialog'
 
 export default ({
   data(){
     return{
+        priorities: [1, 2, 3, 4],
         formContent: {
           name: '',
           date: dayjs().format('YYYY-MM-DD'),
           content: '',
-        },
+          priority: 4
+      },
         isEditTodo: false
       }
   },
-  props: {
-    setTodo: {
-      require: true,
-      type: Object,
-    }
-  },
   async created() {
-    if(this.$store.state.todo.setOpenTodo !== 0) {
-      const id = this.$store.state.todo.setOpenTodo
-      const { data } = await axios.get(`api/v1/todos/${id}`)
-      this.formContent = data.todo
+    const path = this.$route.path
+    const query = this.$route.query
+    const regex = /todos\/edit\/[1-9]/
+    if(regex.test(path)) {
       this.isEditTodo = true
+      const id = this.$route.params.id
+      const { data } = await axios.get(`/api/v1/todos/${id}`)
+      this.formContent = data.todo
+    }else if (query.original_id) {
+      const id = query.original_id
+      const { data } = await axios.get(`/api/v1/todos/${id}`)
+      this.formContent = data.todo
     }
   },
   methods: {
@@ -116,28 +137,24 @@ export default ({
         await this.save()
       }
     },
-    onClickCansel(){
-      this.$emit('onClickCansel')
+    onChabgePriority(priority) {
+      this.formContent.priority = priority
     },
-    resetOpenTodo(){
-      return this.$store.commit('todo/resetOpenTodo')
+    onClickCansel(){
+      this.$router.push('/todos')
     },
     async save(){
       try{
-        const { data } = await axios.post(`/api/v1/todos`, this.formContent)
-        this.$emit('pushTodo', data.new_todo)
+        await axios.post(`/api/v1/todos`, this.formContent)
         this.onClickCansel()
       }catch(e){
         console.error(e)
       }
     },
-    async update(){
+    async update() {
       try{
-        await axios.patch(`/api/v1/todos/${this.formContent.id}`, this.formContent)
-        dialog.commit('close')
-        location.reload()
-        // this.$router.push('/todos',  () => {})
-
+        await axios.patch(`/api/v1/todos/${this.$route.params.id}`, this.formContent)
+        this.onClickCansel()
       }catch(e){
         console.error(e)
       }
@@ -147,9 +164,6 @@ export default ({
     disabled() {
       return !this.formContent.name
     }
-  },
-  beforeDestroy () {
-    this.resetOpenTodo()
   }
 })
 </script>

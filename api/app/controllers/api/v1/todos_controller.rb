@@ -28,10 +28,17 @@ class Api::V1::TodosController < ApplicationController
     render json: res
   end
 
+  def destroy
+    todo = Todo.find(params[:id])
+    @result = todo.delete
+    res = {result: @result, logout: @logout}
+    render json: res
+  end
+
   private
 
   def todo_params
-    params.require(:params).permit(:name, :content, :date, :check)
+    params.require(:params).permit(:name, :content, :date, :check, :priority)
   end
   
 end
